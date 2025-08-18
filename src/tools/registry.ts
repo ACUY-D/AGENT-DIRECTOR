@@ -162,7 +162,7 @@ export class ToolRegistry {
   }> {
     const metadata = [];
 
-    for (const [name, entry] of this.tools.entries()) {
+    for (const [_name, entry] of this.tools.entries()) {
       metadata.push({
         name: entry.tool.metadata.name,
         description: entry.tool.metadata.description,
@@ -354,7 +354,9 @@ export class ToolRegistry {
    */
   private updateStatistics(name: string, success: boolean, duration: number): void {
     const entry = this.tools.get(name);
-    if (!entry) return;
+    if (!entry) {
+      return;
+    }
 
     entry.executions++;
     if (!success) {

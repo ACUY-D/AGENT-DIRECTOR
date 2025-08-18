@@ -3,8 +3,8 @@
  * Responsible for code implementation, refactoring, and development tasks
  */
 
-import * as path from 'path';
-import * as fs from 'fs/promises';
+import * as fs from 'node:fs/promises';
+import * as path from 'node:path';
 import { z } from 'zod';
 import {
   type AgentCapability,
@@ -575,7 +575,7 @@ export class DeveloperAgent extends BaseAgent {
   /**
    * Generate main file for feature
    */
-  private async generateMainFile(spec: FeatureSpec, language: string, framework: string): Promise<CodeFile> {
+  private async generateMainFile(spec: FeatureSpec, language: string, _framework: string): Promise<CodeFile> {
     const template = this.getCodeTemplate(language, 'main');
     let content = template?.template || '';
 
@@ -586,12 +586,12 @@ export class DeveloperAgent extends BaseAgent {
     // Add imports
     if (template?.imports) {
       const imports = template.imports.join('\n');
-      content = imports + '\n\n' + content;
+      content = `${imports}\n\n${content}`;
     }
 
     // Add implementation based on requirements
     const implementation = this.generateImplementation(spec, language);
-    content += '\n\n' + implementation;
+    content += `\n\n${implementation}`;
 
     return {
       path: `src/${spec.name.toLowerCase().replace(/\s+/g, '-')}.${this.getFileExtension(language)}`,
@@ -604,7 +604,7 @@ export class DeveloperAgent extends BaseAgent {
   /**
    * Generate supporting files
    */
-  private async generateSupportingFiles(spec: FeatureSpec, language: string, framework: string): Promise<CodeFile[]> {
+  private async generateSupportingFiles(spec: FeatureSpec, language: string, _framework: string): Promise<CodeFile[]> {
     const files: CodeFile[] = [];
 
     // Interface/Type definitions
@@ -707,19 +707,19 @@ export class DeveloperAgent extends BaseAgent {
     let doc = `# ${spec.name}\n\n`;
     doc += `## Description\n${spec.description}\n\n`;
 
-    doc += `## Requirements\n`;
+    doc += '## Requirements\n';
     for (const req of spec.requirements) {
       doc += `- ${req}\n`;
     }
     doc += '\n';
 
-    doc += `## Acceptance Criteria\n`;
+    doc += '## Acceptance Criteria\n';
     for (const criteria of spec.acceptanceCriteria) {
       doc += `- ${criteria}\n`;
     }
     doc += '\n';
 
-    doc += `## Technical Details\n`;
+    doc += '## Technical Details\n';
     if (spec.technicalDetails) {
       doc += `- **Language**: ${spec.technicalDetails.language}\n`;
       if (spec.technicalDetails.framework) {
@@ -731,7 +731,7 @@ export class DeveloperAgent extends BaseAgent {
     }
     doc += '\n';
 
-    doc += `## Files\n`;
+    doc += '## Files\n';
     for (const file of files) {
       doc += `- \`${file.path}\`: ${file.purpose}\n`;
     }
@@ -740,7 +740,7 @@ export class DeveloperAgent extends BaseAgent {
     doc += '```typescript\n';
     doc += `import { ${spec.name} } from './${spec.name.toLowerCase()}';\n\n`;
     doc += `const instance = new ${spec.name}();\n`;
-    doc += `// Use the feature\n`;
+    doc += '// Use the feature\n';
     doc += '```\n';
 
     return doc;
@@ -787,7 +787,7 @@ export class DeveloperAgent extends BaseAgent {
   // Implementation methods
 }`,
         imports: [`import { Logger } from '../utils/logger';`],
-        exports: [`export { {{FEATURE_NAME}} };`],
+        exports: ['export { {{FEATURE_NAME}} };'],
       },
     ]);
 
@@ -819,7 +819,7 @@ module.exports = { {{FEATURE_NAME}} };`,
         pass
     
     # Implementation methods`,
-        imports: [`import logging`],
+        imports: ['import logging'],
       },
     ]);
   }
@@ -861,7 +861,7 @@ module.exports = { {{FEATURE_NAME}} };`,
   /**
    * Get code template
    */
-  private getCodeTemplate(language: string, type: string): CodeTemplate | undefined {
+  private getCodeTemplate(language: string, _type: string): CodeTemplate | undefined {
     const templates = this.codeTemplates.get(language);
     return templates?.[0]; // Return first template for simplicity
   }
@@ -1025,7 +1025,7 @@ describe('${spec.name} Integration', () => {
   /**
    * Analyze code for testing
    */
-  private analyzeCodeForTesting(code: string): Array<{ name: string; type: string }> {
+  private analyzeCodeForTesting(_code: string): Array<{ name: string; type: string }> {
     // Mock analysis - in real implementation would parse AST
     return [
       { name: 'function1', type: 'function' },
@@ -1080,9 +1080,11 @@ describe('${spec.name} Integration', () => {
   private generateTestSetup(testType: string): string {
     if (testType === 'unit') {
       return '// Setup mocks and stubs';
-    } else if (testType === 'integration') {
+    }
+    if (testType === 'integration') {
       return '// Setup test database and services';
-    } else if (testType === 'e2e') {
+    }
+    if (testType === 'e2e') {
       return '// Setup browser and test environment';
     }
     return '// Test setup';
@@ -1094,9 +1096,11 @@ describe('${spec.name} Integration', () => {
   private generateTestTeardown(testType: string): string {
     if (testType === 'unit') {
       return '// Clear mocks and restore';
-    } else if (testType === 'integration') {
+    }
+    if (testType === 'integration') {
       return '// Clean database and close connections';
-    } else if (testType === 'e2e') {
+    }
+    if (testType === 'e2e') {
       return '// Close browser and cleanup';
     }
     return '// Test teardown';
@@ -1128,7 +1132,7 @@ describe('${spec.name} Integration', () => {
     });
 
     // Mock refactoring
-    refactoredCode = code + '\n// SOLID principles applied';
+    refactoredCode = `${code}\n// SOLID principles applied`;
 
     return { code: refactoredCode, changes };
   }
@@ -1149,7 +1153,7 @@ describe('${spec.name} Integration', () => {
     });
 
     // Mock pattern application
-    refactoredCode = code + `\n// ${pattern} pattern applied`;
+    refactoredCode = `${code}\n// ${pattern} pattern applied`;
 
     return { code: refactoredCode, changes };
   }
@@ -1177,7 +1181,7 @@ describe('${spec.name} Integration', () => {
       reason: 'Improve readability',
     });
 
-    refactoredCode = code + '\n// Complexity reduced';
+    refactoredCode = `${code}\n// Complexity reduced`;
 
     return { code: refactoredCode, changes };
   }
@@ -1197,7 +1201,7 @@ describe('${spec.name} Integration', () => {
       reason: 'Extract Method refactoring',
     });
 
-    refactoredCode = code + '\n// Methods extracted';
+    refactoredCode = `${code}\n// Methods extracted`;
 
     return { code: refactoredCode, changes };
   }
@@ -1205,7 +1209,7 @@ describe('${spec.name} Integration', () => {
   /**
    * Identify improvements
    */
-  private identifyImprovements(originalCode: string, refactoredCode: string): string[] {
+  private identifyImprovements(_originalCode: string, _refactoredCode: string): string[] {
     return [
       'Improved code readability',
       'Reduced cyclomatic complexity',
@@ -1402,7 +1406,7 @@ describe('${spec.name} Integration', () => {
     });
 
     return {
-      code: code + '\n// Algorithms optimized',
+      code: `${code}\n// Algorithms optimized`,
       improvements,
     };
   }
@@ -1422,7 +1426,7 @@ describe('${spec.name} Integration', () => {
     });
 
     return {
-      code: code + '\n// Memory optimized',
+      code: `${code}\n// Memory optimized`,
       improvements,
     };
   }
@@ -1442,7 +1446,7 @@ describe('${spec.name} Integration', () => {
     });
 
     return {
-      code: code + '\n// Caching added',
+      code: `${code}\n// Caching added`,
       improvements,
     };
   }
@@ -1462,7 +1466,7 @@ describe('${spec.name} Integration', () => {
     });
 
     return {
-      code: code + '\n// Async optimized',
+      code: `${code}\n// Async optimized`,
       improvements,
     };
   }

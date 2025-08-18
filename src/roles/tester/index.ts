@@ -454,9 +454,13 @@ export class TesterAgent extends BaseAgent {
       details.push(detail);
 
       // Update counters
-      if (result.passed) passed++;
-      else if (result.skipped) skipped++;
-      else failed++;
+      if (result.passed) {
+        passed++;
+      } else if (result.skipped) {
+        skipped++;
+      } else {
+        failed++;
+      }
     }
 
     const duration = Date.now() - startTime;
@@ -501,7 +505,7 @@ export class TesterAgent extends BaseAgent {
    * Execute a single test case
    */
   private async executeTestCase(
-    testCase: TestCase,
+    _testCase: TestCase,
     testType: string,
   ): Promise<{
     passed: boolean;
@@ -662,7 +666,7 @@ export class TesterAgent extends BaseAgent {
   /**
    * Verify assertion
    */
-  private async verifyAssertion(assertion: Assertion): Promise<boolean> {
+  private async verifyAssertion(_assertion: Assertion): Promise<boolean> {
     // Mock assertion verification
     return Math.random() > 0.1; // 90% success rate
   }
@@ -711,7 +715,7 @@ export class TesterAgent extends BaseAgent {
       duration: `${((Date.now() - startTime) / 1000).toFixed(2)}s`,
       passed,
       avgResponseTime: `${metrics.executionTime.toFixed(2)}ms`,
-      throughput: `${metrics.throughput!.toFixed(2)} req/s`,
+      throughput: `${metrics.throughput?.toFixed(2)} req/s`,
     });
 
     return results;
@@ -774,7 +778,7 @@ export class TesterAgent extends BaseAgent {
   /**
    * Analyze coverage
    */
-  private async analyzeCoverage(testCases: TestCase[], targetCoverage: number): Promise<CoverageReport> {
+  private async analyzeCoverage(_testCases: TestCase[], targetCoverage: number): Promise<CoverageReport> {
     this.logger.debug('Analyzing coverage', { targetCoverage });
 
     // Mock coverage analysis
@@ -812,7 +816,7 @@ export class TesterAgent extends BaseAgent {
   /**
    * Generate test scenarios
    */
-  private async generateTestScenarios(target: string, testType: string): Promise<TestScenario[]> {
+  private async generateTestScenarios(_target: string, testType: string): Promise<TestScenario[]> {
     const scenarios: TestScenario[] = [];
 
     // Generate scenarios based on test type
@@ -914,7 +918,7 @@ export class TesterAgent extends BaseAgent {
   /**
    * Generate boundary value tests
    */
-  private generateBoundaryValueTests(spec: TestSpec): TestCase[] {
+  private generateBoundaryValueTests(_spec: TestSpec): TestCase[] {
     const boundaryTests: TestCase[] = [];
 
     boundaryTests.push({
@@ -1001,10 +1005,7 @@ ${coverage.uncoveredLines ? `Uncovered Lines: ${coverage.uncoveredLines.length}`
    * Generate failed tests content
    */
   private generateFailedTestsContent(failedTests: TestDetail[]): string {
-    return (
-      `Total Failed Tests: ${failedTests.length}\n\n` +
-      failedTests.map((test) => `- ${test.name}: ${test.error?.message || 'Unknown error'}`).join('\n')
-    );
+    return `Total Failed Tests: ${failedTests.length}\n\n${failedTests.map((test) => `- ${test.name}: ${test.error?.message || 'Unknown error'}`).join('\n')}`;
   }
 
   /**
@@ -1107,7 +1108,7 @@ ${coverage.uncoveredLines ? `Uncovered Lines: ${coverage.uncoveredLines.length}`
    */
   async performMutationTesting(
     code: string,
-    tests: string[],
+    _tests: string[],
   ): Promise<{
     mutationScore: number;
     survivedMutants: Array<{
@@ -1179,7 +1180,7 @@ ${coverage.uncoveredLines ? `Uncovered Lines: ${coverage.uncoveredLines.length}`
    */
   async performSecurityTesting(
     target: string,
-    tests?: string[],
+    _tests?: string[],
   ): Promise<{
     vulnerabilities: Array<{
       type: string;
@@ -1368,7 +1369,7 @@ ${coverage.uncoveredLines ? `Uncovered Lines: ${coverage.uncoveredLines.length}`
   async performContractTest(
     provider: string,
     consumer: string,
-    contract: unknown,
+    _contract: unknown,
   ): Promise<{
     passed: boolean;
     violations: Array<{

@@ -289,7 +289,7 @@ export class TesterValidateTool {
   /**
    * Load test cases from files
    */
-  private async loadTestCases(testFiles: string[]): Promise<any[]> {
+  private async loadTestCases(_testFiles: string[]): Promise<any[]> {
     logger.debug('Loading test cases');
 
     // Mock implementation - would parse actual test files

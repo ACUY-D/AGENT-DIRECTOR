@@ -61,13 +61,7 @@
     ]
   },
   "testTypes": {
-    "functional": [
-      "Unit tests",
-      "Integration tests",
-      "System tests",
-      "Acceptance tests",
-      "Smoke tests"
-    ],
+    "functional": ["Unit tests", "Integration tests", "System tests", "Acceptance tests", "Smoke tests"],
     "nonFunctional": [
       "Performance tests",
       "Security tests",

@@ -1,9 +1,9 @@
-import { exec } from 'child_process';
-import { existsSync } from 'fs';
-import { join } from 'path';
-import { promisify } from 'util';
+import { exec } from 'node:child_process';
+import { existsSync } from 'node:fs';
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
+import { promisify } from 'node:util';
 import { Page, expect, test } from '@playwright/test';
-import { mkdir, readFile, rm, writeFile } from 'fs/promises';
 
 const execAsync = promisify(exec);
 

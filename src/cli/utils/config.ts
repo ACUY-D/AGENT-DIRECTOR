@@ -3,9 +3,9 @@
  * Handles configuration loading from multiple sources
  */
 
-import path from 'path';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import { createLogger } from '@utils/logger';
-import fs from 'fs/promises';
 import { z } from 'zod';
 
 const logger = createLogger('cli-config');
@@ -243,10 +243,7 @@ export class CLIConfig {
           logger.debug({ filePath }, 'Configuration file loaded');
           return config;
         }
-      } catch (error) {
-        // File doesn't exist or is not readable, continue to next
-        continue;
-      }
+      } catch (_error) {}
     }
 
     return null;

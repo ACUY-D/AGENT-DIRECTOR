@@ -23,16 +23,8 @@
       "Analizar complejidad del sistema",
       "Medir acoplamiento y cohesión"
     ],
-    "ANALYZE": [
-      "Identificar problemas arquitectónicos",
-      "Proponer refactorizaciones",
-      "Evaluar deuda técnica"
-    ],
-    "DEPLOY": [
-      "Validar arquitectura de despliegue",
-      "Definir estrategias de escalabilidad",
-      "Diseñar infraestructura"
-    ]
+    "ANALYZE": ["Identificar problemas arquitectónicos", "Proponer refactorizaciones", "Evaluar deuda técnica"],
+    "DEPLOY": ["Validar arquitectura de despliegue", "Definir estrategias de escalabilidad", "Diseñar infraestructura"]
   },
   "guidelines": {
     "principles": [

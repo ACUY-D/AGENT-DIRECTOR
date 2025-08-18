@@ -3,10 +3,10 @@
  * Builds the project for production
  */
 
-import { type ChildProcess, spawn } from 'child_process';
-import path from 'path';
+import { type ChildProcess, spawn } from 'node:child_process';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import { createLogger } from '@utils/logger';
-import fs from 'fs/promises';
 import { CLIConfig } from '../utils/config';
 import { getLogger } from '../utils/logger';
 
@@ -126,11 +126,11 @@ export class BuildCommand {
             cwd: process.cwd(),
           });
 
-          let output = '';
+          let _output = '';
           let errorOutput = '';
 
           this.buildProcess.stdout?.on('data', (data) => {
-            output += data.toString();
+            _output += data.toString();
             logger.debug(data.toString());
           });
 
@@ -291,9 +291,9 @@ export class BuildCommand {
 
       cliLogger.newLine();
       cliLogger.box('Build Summary', [
-        `Output Directory: ./dist`,
+        'Output Directory: ./dist',
         `Files Generated: ${files.length}`,
-        `Entry Point: dist/index.js`,
+        'Entry Point: dist/index.js',
       ]);
 
       cliLogger.newLine();

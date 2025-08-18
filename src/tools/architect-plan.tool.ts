@@ -132,7 +132,7 @@ export class ArchitectPlanTool {
 
       // Analyze existing codebase if provided
       let codebaseAnalysis = null;
-      if (validatedInput.existingCodebase && validatedInput.existingCodebase.analysis) {
+      if (validatedInput.existingCodebase?.analysis) {
         codebaseAnalysis = await this.analyzeCodebase(validatedInput.existingCodebase.path);
       }
 
@@ -218,7 +218,7 @@ export class ArchitectPlanTool {
     logger.debug('Generating requirements');
 
     const requirements: Requirements = {
-      functional: ['System shall ' + objective, ...(acceptanceCriteria || [])],
+      functional: [`System shall ${objective}`, ...(acceptanceCriteria || [])],
       nonFunctional: ['System shall be scalable', 'System shall be maintainable', 'System shall have 99.9% uptime'],
       constraints: constraints || [],
       assumptions: ['Users have modern browsers', 'Internet connectivity is reliable'],
@@ -301,7 +301,7 @@ export class ArchitectPlanTool {
   /**
    * Generate architectural decisions
    */
-  private async generateDecisions(architecture: Architecture, techStack?: any): Promise<any[]> {
+  private async generateDecisions(_architecture: Architecture, techStack?: any): Promise<any[]> {
     logger.debug('Generating architectural decisions');
 
     const decisions = [
@@ -329,7 +329,7 @@ export class ArchitectPlanTool {
   /**
    * Create work breakdown structure
    */
-  private async createWBS(objective: string, architecture: Architecture): Promise<WorkBreakdownStructure> {
+  private async createWBS(_objective: string, _architecture: Architecture): Promise<WorkBreakdownStructure> {
     logger.debug('Creating work breakdown structure');
 
     const wbs: WorkBreakdownStructure = {
@@ -404,7 +404,7 @@ export class ArchitectPlanTool {
   /**
    * Define test strategy
    */
-  private async defineTestStrategy(architecture: Architecture, acceptanceCriteria?: string[]): Promise<any> {
+  private async defineTestStrategy(_architecture: Architecture, acceptanceCriteria?: string[]): Promise<any> {
     logger.debug('Defining test strategy');
 
     return {
@@ -419,7 +419,7 @@ export class ArchitectPlanTool {
   /**
    * Assess project risks
    */
-  private async assessRisks(architecture: Architecture, techStack?: any): Promise<RiskAssessment> {
+  private async assessRisks(_architecture: Architecture, _techStack?: any): Promise<RiskAssessment> {
     logger.debug('Assessing risks');
 
     const risks: RiskAssessment = {
@@ -465,11 +465,11 @@ export class ArchitectPlanTool {
    * Generate documentation files
    */
   private async generateDocumentation(
-    architecture: Architecture,
-    decisions: any[],
-    wbs: WorkBreakdownStructure,
-    testStrategy: any,
-    riskAssessment: RiskAssessment,
+    _architecture: Architecture,
+    _decisions: any[],
+    _wbs: WorkBreakdownStructure,
+    _testStrategy: any,
+    _riskAssessment: RiskAssessment,
   ): Promise<string[]> {
     logger.debug('Generating documentation');
 
@@ -489,7 +489,7 @@ export class ArchitectPlanTool {
   /**
    * Generate Mermaid diagram
    */
-  private generateMermaidDiagram(architecture: Architecture): string {
+  private generateMermaidDiagram(_architecture: Architecture): string {
     const diagram = `
 graph TB
     subgraph "System Architecture"
@@ -592,8 +592,12 @@ graph TB
    * Map probability value to enum
    */
   private mapProbability(value: number): 'low' | 'medium' | 'high' {
-    if (value < 0.33) return 'low';
-    if (value < 0.66) return 'medium';
+    if (value < 0.33) {
+      return 'low';
+    }
+    if (value < 0.66) {
+      return 'medium';
+    }
     return 'high';
   }
 
@@ -601,8 +605,12 @@ graph TB
    * Map impact value to enum
    */
   private mapImpact(value: number): 'low' | 'medium' | 'high' {
-    if (value < 0.33) return 'low';
-    if (value < 0.66) return 'medium';
+    if (value < 0.33) {
+      return 'low';
+    }
+    if (value < 0.66) {
+      return 'medium';
+    }
     return 'high';
   }
 }

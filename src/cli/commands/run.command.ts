@@ -3,11 +3,11 @@
  * Executes the BMAD pipeline with the orchestrator
  */
 
-import path from 'path';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import { CheckpointManager } from '@core/checkpoint';
 import { OrchestratorRunTool } from '@tools/orchestrator-run.tool';
 import { createLogger } from '@utils/logger';
-import fs from 'fs/promises';
 import { CLIConfig } from '../utils/config';
 import { getLogger } from '../utils/logger';
 
@@ -361,7 +361,7 @@ export class RunCommand {
   /**
    * Get pipeline progress
    */
-  private async getProgress(pipelineId: string): Promise<PipelineProgress> {
+  private async getProgress(_pipelineId: string): Promise<PipelineProgress> {
     // Read from STATE.json
     const statePath = path.join(process.cwd(), '.kilo', 'state', 'STATE.json');
 

@@ -53,7 +53,7 @@ export class ResumeCommand {
       }
 
       // Load checkpoint
-      const spinner = cliLogger.startSpinner(`Loading checkpoint ${checkpointId.substring(0, 8)}...`);
+      const _spinner = cliLogger.startSpinner(`Loading checkpoint ${checkpointId.substring(0, 8)}...`);
 
       try {
         const checkpoint = await this.checkpointManager.load(checkpointId);
@@ -102,7 +102,7 @@ export class ResumeCommand {
    * List available checkpoints
    */
   private async listCheckpoints(): Promise<void> {
-    const spinner = cliLogger.startSpinner('Loading checkpoints...');
+    const _spinner = cliLogger.startSpinner('Loading checkpoints...');
 
     try {
       const checkpoints = await this.checkpointManager.list();
@@ -125,7 +125,7 @@ export class ResumeCommand {
         cliLogger.divider('-', 40);
 
         const tableData = pipelineCheckpoints.map((cp) => [
-          cp.id.substring(0, 8) + '...',
+          `${cp.id.substring(0, 8)}...`,
           new Date(cp.timestamp).toLocaleString(),
           cp.phase || 'N/A',
           cp.reason || 'Manual',
@@ -319,8 +319,8 @@ export class ResumeCommand {
     };
 
     // Write state to STATE.json
-    const fs = await import('fs/promises');
-    const path = await import('path');
+    const fs = await import('node:fs/promises');
+    const path = await import('node:path');
     const statePath = path.join(process.cwd(), '.kilo', 'state', 'STATE.json');
 
     try {
@@ -445,7 +445,9 @@ export class ResumeCommand {
    * Format file size
    */
   private formatSize(bytes?: number): string {
-    if (!bytes) return 'N/A';
+    if (!bytes) {
+      return 'N/A';
+    }
 
     const units = ['B', 'KB', 'MB', 'GB'];
     let size = bytes;

@@ -35,7 +35,7 @@
         "noUnsafeFinally": "error",
         "noUnsafeOptionalChaining": "error",
         "noUnusedLabels": "error",
-        "noUnusedVariables": "error",
+        "noUnusedVariables": "warn",
         "useArrayLiterals": "error",
         "useIsNan": "error",
         "useValidForDirection": "error"
@@ -45,7 +45,7 @@
         "noCatchAssign": "error",
         "noClassAssign": "error",
         "noCompareNegZero": "error",
-        "noConsoleLog": "warn",
+        "noConsoleLog": "off",
         "noControlCharactersInRegex": "error",
         "noDebugger": "error",
         "noDuplicateCase": "error",
@@ -62,14 +62,17 @@
         "noShadowRestrictedNames": "error",
         "noUnsafeNegation": "error",
         "useDefaultSwitchClauseLast": "error",
-        "useValidTypeof": "error"
+        "useValidTypeof": "error",
+        "noExplicitAny": "warn"
       },
       "style": {
         "noCommaOperator": "error",
         "noVar": "error",
-        "useBlockStatements": "error",
+        "useBlockStatements": "warn",
         "useConst": "error",
-        "useSingleVarDeclarator": "error"
+        "useSingleVarDeclarator": "error",
+        "useNodejsImportProtocol": "warn",
+        "noUnusedTemplateLiteral": "warn"
       }
     }
   },

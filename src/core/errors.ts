@@ -465,7 +465,7 @@ export interface ErrorHandler {
  * Default error handler implementation
  */
 export class DefaultErrorHandler implements ErrorHandler {
-  async handle(error: Error, context?: Record<string, unknown>): Promise<RecoveryStrategy> {
+  async handle(error: Error, _context?: Record<string, unknown>): Promise<RecoveryStrategy> {
     const classification = ErrorClassifier.classify(error);
 
     // Critical errors require abort
@@ -492,7 +492,7 @@ export class DefaultErrorHandler implements ErrorHandler {
     return RecoveryStrategy.SKIP;
   }
 
-  canHandle(error: Error): boolean {
+  canHandle(_error: Error): boolean {
     return true; // Default handler can handle any error
   }
 }

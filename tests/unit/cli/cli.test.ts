@@ -3,8 +3,8 @@
  * Basic tests for CLI command parsing and execution
  */
 
-import { spawn } from 'child_process';
-import path from 'path';
+import { spawn } from 'node:child_process';
+import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock modules
@@ -370,7 +370,7 @@ describe('CLI Utils', () => {
     });
 
     it('should get and set configuration values', () => {
-      const config = CLIConfig.getInstance();
+      const _config = CLIConfig.getInstance();
 
       CLIConfig.setValue('environment', 'test');
       const value = CLIConfig.getValue('environment');

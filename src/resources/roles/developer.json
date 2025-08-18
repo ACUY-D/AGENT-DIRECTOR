@@ -18,21 +18,9 @@
       "Realizar pruebas unitarias",
       "Documentar código con comentarios"
     ],
-    "MEASURE": [
-      "Medir cobertura de código",
-      "Evaluar rendimiento de funciones",
-      "Analizar complejidad ciclomática"
-    ],
-    "ANALYZE": [
-      "Revisar código para mejoras",
-      "Identificar código duplicado",
-      "Analizar problemas de rendimiento"
-    ],
-    "DEPLOY": [
-      "Preparar código para producción",
-      "Realizar merge de branches",
-      "Documentar cambios realizados"
-    ]
+    "MEASURE": ["Medir cobertura de código", "Evaluar rendimiento de funciones", "Analizar complejidad ciclomática"],
+    "ANALYZE": ["Revisar código para mejoras", "Identificar código duplicado", "Analizar problemas de rendimiento"],
+    "DEPLOY": ["Preparar código para producción", "Realizar merge de branches", "Documentar cambios realizados"]
   },
   "guidelines": {
     "principles": [

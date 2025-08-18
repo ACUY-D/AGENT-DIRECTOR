@@ -14,7 +14,7 @@ vi.mock('@/core/orchestrator', () => ({
 describe('OrchestratorRunTool', () => {
   let tool: OrchestratorRunTool;
   let mockOrchestrator: any;
-  let mockCoordinator: MockAgentCoordinator;
+  let _mockCoordinator: MockAgentCoordinator;
 
   beforeEach(() => {
     // Setup mock orchestrator
@@ -28,7 +28,7 @@ describe('OrchestratorRunTool', () => {
     };
 
     // Setup mock coordinator
-    mockCoordinator = new MockAgentCoordinator();
+    _mockCoordinator = new MockAgentCoordinator();
 
     // Configure Orchestrator mock
     (Orchestrator as any).mockImplementation(() => mockOrchestrator);

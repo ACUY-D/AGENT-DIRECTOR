@@ -3,7 +3,7 @@
  * Runs linting and formatting checks
  */
 
-import { type ChildProcess, spawn } from 'child_process';
+import { type ChildProcess, spawn } from 'node:child_process';
 import { createLogger } from '@utils/logger';
 import { getLogger } from '../utils/logger';
 
@@ -28,7 +28,7 @@ export class LintCommand {
       }
 
       const action = options.fix ? 'Fixing' : 'Checking';
-      const spinner = cliLogger.startSpinner(`${action} code style and formatting...`);
+      const _spinner = cliLogger.startSpinner(`${action} code style and formatting...`);
 
       try {
         const results = await this.runLinter(options.fix || false);
@@ -102,7 +102,7 @@ export class LintCommand {
         resolve(results);
       });
 
-      this.lintProcess.on('error', (error) => {
+      this.lintProcess.on('error', (_error) => {
         // Try fallback to ESLint if biome not found
         this.runESLint(fix).then(resolve).catch(reject);
       });

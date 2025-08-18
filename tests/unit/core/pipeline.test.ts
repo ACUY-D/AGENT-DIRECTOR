@@ -163,21 +163,21 @@ describe('PipelineManager', () => {
     });
 
     it('should respect task priorities', async () => {
-      const highPriorityTask = await pipelineManager.addTask(
+      const _highPriorityTask = await pipelineManager.addTask(
         'High priority',
         'coding',
         {},
         { priority: TaskPriority.HIGH },
       );
 
-      const lowPriorityTask = await pipelineManager.addTask(
+      const _lowPriorityTask = await pipelineManager.addTask(
         'Low priority',
         'coding',
         {},
         { priority: TaskPriority.LOW },
       );
 
-      const mediumPriorityTask = await pipelineManager.addTask(
+      const _mediumPriorityTask = await pipelineManager.addTask(
         'Medium priority',
         'coding',
         {},
@@ -339,7 +339,7 @@ describe('PipelineManager', () => {
 
     it('should detect deadlocks', async () => {
       const task1 = await pipelineManager.addTask('Task 1', 'coding', {});
-      const task2 = await pipelineManager.addTask('Task 2', 'testing', {}, { dependencies: [task1.id] });
+      const _task2 = await pipelineManager.addTask('Task 2', 'testing', {}, { dependencies: [task1.id] });
 
       // Mock agent to not handle task1 (creating deadlock)
       const agents = (pipelineManager as any).agents as Map<string, any>;

@@ -6,21 +6,17 @@
 import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { createLogger } from '../utils/logger';
 
+import { bmadWorkflowTools } from './bmad.workflow';
 // Importar herramientas
 import { roleDirectorTool } from './role.director';
 import { roleTransitionTool } from './role.transition';
-import { bmadWorkflowTools } from './bmad.workflow';
 
 const logger = createLogger('tools-registry');
 
 /**
  * Registro de todas las herramientas disponibles
  */
-export const AVAILABLE_TOOLS = [
-  roleDirectorTool,
-  roleTransitionTool,
-  ...bmadWorkflowTools
-];
+export const AVAILABLE_TOOLS = [roleDirectorTool, roleTransitionTool, ...bmadWorkflowTools];
 
 /**
  * Nombres de herramientas para referencia rápida
@@ -29,7 +25,7 @@ export const TOOL_NAMES = {
   GET_ROLE_INSTRUCTIONS: 'role.getCurrentInstructions',
   ROLE_TRANSITION: 'role.transition',
   START_PROJECT: 'workflow.startProject',
-  GET_PHASE_GUIDANCE: 'bmad.getPhaseGuidance'
+  GET_PHASE_GUIDANCE: 'bmad.getPhaseGuidance',
 } as const;
 
 /**
@@ -56,10 +52,10 @@ export async function registerTools(server: Server): Promise<void> {
 async function handleListTools(): Promise<{ tools: any[] }> {
   logger.debug('Listando herramientas disponibles');
 
-  const tools = AVAILABLE_TOOLS.map(tool => ({
+  const tools = AVAILABLE_TOOLS.map((tool) => ({
     name: tool.name,
     description: tool.description,
-    inputSchema: convertToJsonSchema(tool.inputSchema)
+    inputSchema: convertToJsonSchema(tool.inputSchema),
   }));
 
   return { tools };
@@ -78,8 +74,8 @@ async function handleCallTool(request: any): Promise<any> {
 
   try {
     // Buscar la herramienta
-    const tool = AVAILABLE_TOOLS.find(t => t.name === name);
-    
+    const tool = AVAILABLE_TOOLS.find((t) => t.name === name);
+
     if (!tool) {
       throw new Error(`Herramienta no encontrada: ${name}`);
     }
@@ -91,25 +87,29 @@ async function handleCallTool(request: any): Promise<any> {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(result, null, 2)
-        }
-      ]
+          text: JSON.stringify(result, null, 2),
+        },
+      ],
     };
   } catch (error) {
     logger.error(`Error ejecutando herramienta ${name}:`, error);
-    
+
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify({
-            error: true,
-            message: (error as Error).message,
-            tool: name
-          }, null, 2)
-        }
+          text: JSON.stringify(
+            {
+              error: true,
+              message: (error as Error).message,
+              tool: name,
+            },
+            null,
+            2,
+          ),
+        },
       ],
-      isError: true
+      isError: true,
     };
   }
 }
@@ -117,13 +117,13 @@ async function handleCallTool(request: any): Promise<any> {
 /**
  * Convertir schema Zod a JSON Schema para MCP
  */
-function convertToJsonSchema(zodSchema: any): any {
+function convertToJsonSchema(_zodSchema: any): any {
   // Conversión simplificada - en producción sería más compleja
   return {
     type: 'object',
     properties: {},
     required: [],
-    additionalProperties: false
+    additionalProperties: false,
   };
 }
 
@@ -131,52 +131,46 @@ function convertToJsonSchema(zodSchema: any): any {
  * Obtener herramienta por nombre
  */
 export function getToolByName(name: string) {
-  return AVAILABLE_TOOLS.find(tool => tool.name === name);
+  return AVAILABLE_TOOLS.find((tool) => tool.name === name);
 }
 
 /**
  * Verificar si una herramienta existe
  */
 export function hasTool(name: string): boolean {
-  return AVAILABLE_TOOLS.some(tool => tool.name === name);
+  return AVAILABLE_TOOLS.some((tool) => tool.name === name);
 }
 
 /**
  * Obtener descripción de todas las herramientas
  */
 export function getToolsDescription(): string {
-  return AVAILABLE_TOOLS.map(tool => 
-    `- **${tool.name}**: ${tool.description}`
-  ).join('\n');
+  return AVAILABLE_TOOLS.map((tool) => `- **${tool.name}**: ${tool.description}`).join('\n');
 }
 
 /**
  * Exportar herramientas individuales para uso directo
  */
-export {
-  roleDirectorTool,
-  roleTransitionTool,
-  bmadWorkflowTools
-};
+export { roleDirectorTool, roleTransitionTool, bmadWorkflowTools };
 
 /**
  * Exportar tipos
  */
 export type {
   GetRoleInstructionsInput,
-  RoleInstructionsOutput
+  RoleInstructionsOutput,
 } from './role.director';
 
 export type {
   RoleTransitionInput,
-  RoleTransitionOutput
+  RoleTransitionOutput,
 } from './role.transition';
 
 export type {
   StartProjectInput,
   StartProjectOutput,
   PhaseGuidanceInput,
-  PhaseGuidanceOutput
+  PhaseGuidanceOutput,
 } from './bmad.workflow';
 
 // Re-exportar enums útiles

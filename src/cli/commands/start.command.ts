@@ -3,7 +3,7 @@
  * Starts the MCP server in stdio or HTTP mode
  */
 
-import { type ChildProcess, spawn } from 'child_process';
+import { type ChildProcess, spawn } from 'node:child_process';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { PromptRegistry } from '@prompts/registry';
@@ -220,7 +220,7 @@ export class StartCommand {
       cliLogger.newLine();
       cliLogger.info(`Received ${signal}, shutting down gracefully...`);
 
-      const spinner = cliLogger.startSpinner('Stopping server...');
+      const _spinner = cliLogger.startSpinner('Stopping server...');
 
       try {
         await this.stop();

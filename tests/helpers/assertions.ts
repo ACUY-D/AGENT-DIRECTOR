@@ -171,7 +171,7 @@ export function expectEnvironmentVariables(requiredVars: string[]): void {
  * Assert that a file path exists
  */
 export function expectFileExists(path: string): void {
-  const fs = require('fs');
+  const fs = require('node:fs');
   expect(fs.existsSync(path), `File not found: ${path}`).toBe(true);
 }
 
@@ -211,22 +211,34 @@ export function expectDeepEqualWithCustom<T>(
   customComparator?: (a: any, b: any) => boolean,
 ): void {
   const deepEqual = (a: any, b: any): boolean => {
-    if (customComparator && customComparator(a, b)) {
+    if (customComparator?.(a, b)) {
       return true;
     }
 
-    if (a === b) return true;
-    if (a == null || b == null) return false;
-    if (typeof a !== 'object' || typeof b !== 'object') return false;
+    if (a === b) {
+      return true;
+    }
+    if (a == null || b == null) {
+      return false;
+    }
+    if (typeof a !== 'object' || typeof b !== 'object') {
+      return false;
+    }
 
     const keysA = Object.keys(a);
     const keysB = Object.keys(b);
 
-    if (keysA.length !== keysB.length) return false;
+    if (keysA.length !== keysB.length) {
+      return false;
+    }
 
     for (const key of keysA) {
-      if (!keysB.includes(key)) return false;
-      if (!deepEqual(a[key], b[key])) return false;
+      if (!keysB.includes(key)) {
+        return false;
+      }
+      if (!deepEqual(a[key], b[key])) {
+        return false;
+      }
     }
 
     return true;

@@ -350,7 +350,7 @@ describe('PipelineStateMachine', () => {
 
     it('should support retry mechanism', () => {
       const context = stateMachine.getContext();
-      const initialRetryCount = context?.retryCount || 0;
+      const _initialRetryCount = context?.retryCount || 0;
 
       // Simulate error and retry
       stateMachine.send(PipelineEvent.ERROR, {

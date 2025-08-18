@@ -172,10 +172,10 @@ describe('Pipeline Integration', () => {
         }
       });
 
-      let result1: PipelineResult;
+      let _result1: PipelineResult;
       try {
-        result1 = await orchestrator.run(options1);
-      } catch (error) {
+        _result1 = await orchestrator.run(options1);
+      } catch (_error) {
         // Expected failure
       }
 

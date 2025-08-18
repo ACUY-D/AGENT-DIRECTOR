@@ -70,7 +70,7 @@ export class MockArchitectAgent extends BaseAgent {
     });
   }
 
-  async execute(message: AgentMessage): Promise<AgentResult> {
+  async execute(_message: AgentMessage): Promise<AgentResult> {
     return {
       success: true,
       agentId: this.id,
@@ -94,7 +94,7 @@ export class MockDeveloperAgent extends BaseAgent {
     });
   }
 
-  async execute(message: AgentMessage): Promise<AgentResult> {
+  async execute(_message: AgentMessage): Promise<AgentResult> {
     return {
       success: true,
       agentId: this.id,
@@ -122,7 +122,7 @@ export class MockTesterAgent extends BaseAgent {
     });
   }
 
-  async execute(message: AgentMessage): Promise<AgentResult> {
+  async execute(_message: AgentMessage): Promise<AgentResult> {
     return {
       success: true,
       agentId: this.id,
@@ -169,7 +169,7 @@ export class MockDebuggerAgent extends BaseAgent {
     });
   }
 
-  async execute(message: AgentMessage): Promise<AgentResult> {
+  async execute(_message: AgentMessage): Promise<AgentResult> {
     return {
       success: true,
       agentId: this.id,

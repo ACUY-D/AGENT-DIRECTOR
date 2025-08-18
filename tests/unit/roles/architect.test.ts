@@ -151,7 +151,7 @@ describe('ArchitectAgent', () => {
     });
 
     it('should handle missing requirements gracefully', async () => {
-      delete mockMessage.content.context.requirements;
+      mockMessage.content.context.requirements = undefined;
 
       const result = await architectAgent.execute(mockMessage);
 

@@ -431,7 +431,7 @@ export class ArchitectAgent extends BaseAgent {
           {
             id: `impl-${component.name}-2`,
             name: `Implement ${component.name}`,
-            description: `Implement core functionality`,
+            description: 'Implement core functionality',
             assignee: 'developer',
             estimate: this.estimateComponentEffort(component),
             priority: 'high',
@@ -439,7 +439,7 @@ export class ArchitectAgent extends BaseAgent {
           {
             id: `impl-${component.name}-3`,
             name: `Test ${component.name}`,
-            description: `Write and execute tests`,
+            description: 'Write and execute tests',
             assignee: 'tester',
             estimate: Math.ceil(this.estimateComponentEffort(component) * 0.3),
             priority: 'medium',
@@ -660,14 +660,14 @@ export class ArchitectAgent extends BaseAgent {
     content += `## Status\n${decision.status}\n\n`;
     content += `## Context\n${decision.context}\n\n`;
     content += `## Decision\n${decision.decision}\n\n`;
-    content += `## Consequences\n`;
+    content += '## Consequences\n';
 
     for (const consequence of decision.consequences) {
       content += `- ${consequence}\n`;
     }
 
     if (decision.alternatives && decision.alternatives.length > 0) {
-      content += `\n## Alternatives Considered\n`;
+      content += '\n## Alternatives Considered\n';
       for (const alternative of decision.alternatives) {
         content += `- ${alternative}\n`;
       }
@@ -752,7 +752,7 @@ export class ArchitectAgent extends BaseAgent {
   /**
    * Make assumptions
    */
-  private makeAssumptions(objective: string): string[] {
+  private makeAssumptions(_objective: string): string[] {
     return [
       'Development team has necessary skills',
       'Infrastructure resources are available',
@@ -791,9 +791,11 @@ export class ArchitectAgent extends BaseAgent {
 
     if (reqCount > 10) {
       return ArchitecturePattern.MICROSERVICES;
-    } else if (requirements.nonFunctional.some((r) => r.includes('event'))) {
+    }
+    if (requirements.nonFunctional.some((r) => r.includes('event'))) {
       return ArchitecturePattern.EVENT_DRIVEN;
-    } else if (requirements.functional.some((r) => r.includes('API'))) {
+    }
+    if (requirements.functional.some((r) => r.includes('API'))) {
       return ArchitecturePattern.LAYERED;
     }
 
@@ -803,7 +805,7 @@ export class ArchitectAgent extends BaseAgent {
   /**
    * Design components
    */
-  private async designComponents(requirements: Requirements, pattern: string): Promise<ComponentDesign[]> {
+  private async designComponents(_requirements: Requirements, pattern: string): Promise<ComponentDesign[]> {
     const components: ComponentDesign[] = [];
 
     // API Gateway
@@ -1143,7 +1145,7 @@ export class ArchitectAgent extends BaseAgent {
     doc += '\n## Diagrams\n';
     for (const diagram of architecture.diagrams) {
       doc += `\n### ${diagram.title}\n`;
-      doc += '```' + diagram.format + '\n';
+      doc += `\`\`\`${diagram.format}\n`;
       doc += diagram.content;
       doc += '```\n';
     }

@@ -1,5 +1,5 @@
-import { promises as fs } from 'fs';
-import { join } from 'path';
+import { promises as fs } from 'node:fs';
+import { join } from 'node:path';
 import { vi } from 'vitest';
 
 /**
@@ -84,8 +84,8 @@ export class MockFileSystem {
 
     // Check if directory is empty
     const hasChildren =
-      Array.from(this.files.keys()).some((file) => file.startsWith(path + '/')) ||
-      Array.from(this.directories).some((dir) => dir !== path && dir.startsWith(path + '/'));
+      Array.from(this.files.keys()).some((file) => file.startsWith(`${path}/`)) ||
+      Array.from(this.directories).some((dir) => dir !== path && dir.startsWith(`${path}/`));
 
     if (hasChildren) {
       throw new Error(`ENOTEMPTY: directory not empty, rmdir '${path}'`);
@@ -106,7 +106,7 @@ export class MockFileSystem {
 
     // Add files
     for (const filePath of this.files.keys()) {
-      if (filePath.startsWith(path + '/')) {
+      if (filePath.startsWith(`${path}/`)) {
         const relativePath = filePath.slice(path.length + 1);
         const firstPart = relativePath.split('/')[0];
         items.add(firstPart);
@@ -115,7 +115,7 @@ export class MockFileSystem {
 
     // Add directories
     for (const dirPath of this.directories) {
-      if (dirPath !== path && dirPath.startsWith(path + '/')) {
+      if (dirPath !== path && dirPath.startsWith(`${path}/`)) {
         const relativePath = dirPath.slice(path.length + 1);
         const firstPart = relativePath.split('/')[0];
         items.add(firstPart);
@@ -139,7 +139,7 @@ export class MockFileSystem {
     return {
       isFile: () => isFile,
       isDirectory: () => isDirectory,
-      size: isFile ? this.files.get(path)!.length : 0,
+      size: isFile ? this.files.get(path)?.length : 0,
       mtime: new Date(),
       ctime: new Date(),
       atime: new Date(),
@@ -203,7 +203,7 @@ export function createMockFs() {
         mockFs.deleteDirectory(path);
       }),
 
-      mkdir: vi.fn(async (path: string, options?: any) => {
+      mkdir: vi.fn(async (path: string, _options?: any) => {
         mockFs.addDirectory(path);
       }),
 
@@ -251,7 +251,7 @@ export function createMockFs() {
       mockFs.writeFile(path, content);
     }),
 
-    mkdirSync: vi.fn((path: string, options?: any) => {
+    mkdirSync: vi.fn((path: string, _options?: any) => {
       mockFs.addDirectory(path);
     }),
 

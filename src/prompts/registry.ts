@@ -41,8 +41,10 @@ export class PromptRegistry {
   }
 
   static getInstance(): PromptRegistry {
-    if (!this.instance) this.instance = new PromptRegistry();
-    return this.instance;
+    if (!PromptRegistry.instance) {
+      PromptRegistry.instance = new PromptRegistry();
+    }
+    return PromptRegistry.instance;
   }
 
   register<Vars extends z.ZodTypeAny>(def: PromptDefinition<Vars>): void {
@@ -94,7 +96,9 @@ export function getPromptRegistry(): PromptRegistry {
 }
 
 export async function initializePrompts(server?: Server): Promise<void> {
-  if (!server) return;
+  if (!server) {
+    return;
+  }
   const registry = PromptRegistry.getInstance();
 
   server.setRequestHandler('prompts/list', async () => {

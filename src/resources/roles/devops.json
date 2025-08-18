@@ -61,13 +61,7 @@
     ]
   },
   "infrastructure": {
-    "cloud": [
-      "AWS/Azure/GCP",
-      "Terraform/CloudFormation",
-      "Kubernetes/ECS",
-      "Service Mesh",
-      "API Gateways"
-    ],
+    "cloud": ["AWS/Azure/GCP", "Terraform/CloudFormation", "Kubernetes/ECS", "Service Mesh", "API Gateways"],
     "cicd": [
       "Jenkins/GitLab CI/GitHub Actions",
       "ArgoCD/Flux",
@@ -75,13 +69,7 @@
       "Helm Charts",
       "Artifact repositories"
     ],
-    "monitoring": [
-      "Prometheus/Grafana",
-      "ELK Stack",
-      "DataDog/New Relic",
-      "PagerDuty",
-      "Distributed tracing"
-    ]
+    "monitoring": ["Prometheus/Grafana", "ELK Stack", "DataDog/New Relic", "PagerDuty", "Distributed tracing"]
   },
   "tools": [
     "Docker/Kubernetes",

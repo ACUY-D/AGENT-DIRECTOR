@@ -269,7 +269,7 @@ export class OrchestratorRunTool {
     const artifacts: string[] = [];
 
     if (phase?.artifacts) {
-      for (const [key, value] of phase.artifacts.entries()) {
+      for (const [key, _value] of phase.artifacts.entries()) {
         artifacts.push(key);
       }
     }
@@ -306,7 +306,7 @@ export class OrchestratorRunTool {
   /**
    * Calculate project metrics
    */
-  private async calculateMetrics(localPath: string, result: any): Promise<any> {
+  private async calculateMetrics(_localPath: string, result: any): Promise<any> {
     // Simplified metrics calculation
     const totalDuration = Date.now() - this.startTime.getTime();
 
@@ -379,9 +379,9 @@ export class OrchestratorRunTool {
    */
   private async createPullRequest(
     repoUrl: string,
-    token: string,
+    _token: string,
     pipelineId: string,
-    objective: string,
+    _objective: string,
   ): Promise<string> {
     logger.info('Creating pull request', { repoUrl, pipelineId });
 

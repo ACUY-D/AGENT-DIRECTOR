@@ -4,10 +4,10 @@
  * Extends BaseProvider for retry logic, circuit breaker, and health checks
  */
 
-import * as path from 'path';
+import * as fs from 'node:fs/promises';
+import * as path from 'node:path';
 import type { Client } from '@modelcontextprotocol/sdk/client';
 import type { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
-import * as fs from 'fs/promises';
 import { z } from 'zod';
 import { BaseProvider, type ProviderConfig, ProviderError } from '../core/providers/base.provider';
 import { createLogger } from '../utils/logger';
@@ -1174,7 +1174,9 @@ export class BMADAdapter extends BaseProvider {
    * Save pipeline to storage
    */
   private async savePipeline(pipeline: BMADPipeline): Promise<void> {
-    if (!this.bmadConfig?.pipelineDir) return;
+    if (!this.bmadConfig?.pipelineDir) {
+      return;
+    }
 
     const filePath = path.join(this.bmadConfig.pipelineDir, `${pipeline.id}.json`);
 
@@ -1195,7 +1197,9 @@ export class BMADAdapter extends BaseProvider {
    * Load pipeline from storage
    */
   async loadPipeline(pipelineId: string): Promise<BMADPipeline | null> {
-    if (!this.bmadConfig?.pipelineDir) return null;
+    if (!this.bmadConfig?.pipelineDir) {
+      return null;
+    }
 
     const filePath = path.join(this.bmadConfig.pipelineDir, `${pipelineId}.json`);
 
@@ -1224,7 +1228,9 @@ export class BMADAdapter extends BaseProvider {
    * Save build context
    */
   private async saveContext(context: BuildContext): Promise<void> {
-    if (!this.bmadConfig?.outputDir) return;
+    if (!this.bmadConfig?.outputDir) {
+      return;
+    }
 
     const filePath = path.join(this.bmadConfig.outputDir, `context_${context.id}.json`);
 
@@ -1245,7 +1251,9 @@ export class BMADAdapter extends BaseProvider {
    * Load templates from directory
    */
   async loadTemplates(): Promise<void> {
-    if (!this.bmadConfig?.templatesDir) return;
+    if (!this.bmadConfig?.templatesDir) {
+      return;
+    }
 
     try {
       const files = await fs.readdir(this.bmadConfig.templatesDir);
@@ -1299,7 +1307,9 @@ export class BMADAdapter extends BaseProvider {
    * Validate phase configuration
    */
   validatePhaseConfig(config: PhaseConfig): boolean {
-    if (!this.bmadConfig?.enableValidation) return true;
+    if (!this.bmadConfig?.enableValidation) {
+      return true;
+    }
 
     // Check required fields
     if (!config.type || !config.name || !config.description) {

@@ -13,14 +13,14 @@
  * - mcp://orchestrator/ARTIFACTS/<path> → Lectura de archivo dentro de .kilo/artifacts/
  */
 
-import { promises as fs, existsSync } from 'fs';
-import path from 'path';
+import { promises as fs, existsSync } from 'node:fs';
+import path from 'node:path';
 import { OrchestratorError, ValidationError } from '@core/errors';
 import { ResourceRegistry } from '@resources/registry';
 import { ResourceReadContentSchema, type ResourceReadResult } from '@resources/schemas';
 import { createLogger } from '@utils/logger';
 
-const logger = createLogger('orchestrator-resources');
+const _logger = createLogger('orchestrator-resources');
 
 const ORCH_PREFIX = 'mcp://orchestrator/';
 const ARTIFACTS_PREFIX = `${ORCH_PREFIX}ARTIFACTS/`;

@@ -2,8 +2,8 @@
  * Unit tests for Checkpoint Manager
  */
 
-import * as path from 'path';
-import * as fs from 'fs/promises';
+import * as fs from 'node:fs/promises';
+import * as path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   type CheckpointConfig,
@@ -28,7 +28,7 @@ vi.mock('fs/promises', () => ({
 describe('CheckpointManager', () => {
   let checkpointManager: CheckpointManager;
   let config: CheckpointConfig;
-  const testCheckpointDir = '/test/.kilo/checkpoints';
+  const _testCheckpointDir = '/test/.kilo/checkpoints';
 
   beforeEach(() => {
     config = {
@@ -117,7 +117,7 @@ describe('CheckpointManager', () => {
       expect(checkpointId).toBeDefined();
       expect(fs.writeFile).toHaveBeenCalled();
 
-      const [filePath, content] = (fs.writeFile as any).mock.calls[0];
+      const [filePath, _content] = (fs.writeFile as any).mock.calls[0];
       expect(filePath).toContain('test-checkpoint');
       expect(filePath).toContain(testData.pipelineId);
     });

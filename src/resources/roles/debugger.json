@@ -11,16 +11,8 @@
     "Resolución de problemas"
   ],
   "responsibilities": {
-    "BUILD": [
-      "Configurar herramientas de debugging",
-      "Implementar logging estratégico",
-      "Crear tests de reproducción"
-    ],
-    "MEASURE": [
-      "Recolectar logs y métricas",
-      "Medir impacto de bugs",
-      "Evaluar frecuencia de errores"
-    ],
+    "BUILD": ["Configurar herramientas de debugging", "Implementar logging estratégico", "Crear tests de reproducción"],
+    "MEASURE": ["Recolectar logs y métricas", "Medir impacto de bugs", "Evaluar frecuencia de errores"],
     "ANALYZE": [
       "Investigar causa raíz de errores",
       "Analizar stack traces",
@@ -28,11 +20,7 @@
       "Diagnosticar problemas de rendimiento",
       "Documentar hallazgos"
     ],
-    "DEPLOY": [
-      "Validar fixes en producción",
-      "Monitorear errores post-deployment",
-      "Configurar alertas de errores"
-    ]
+    "DEPLOY": ["Validar fixes en producción", "Monitorear errores post-deployment", "Configurar alertas de errores"]
   },
   "guidelines": {
     "principles": [
@@ -68,13 +56,7 @@
       "7. Verificar corrección",
       "8. Prevenir regresión"
     ],
-    "artifacts": [
-      "Steps to reproduce",
-      "Error logs",
-      "Stack traces",
-      "System state",
-      "Environment details"
-    ]
+    "artifacts": ["Steps to reproduce", "Error logs", "Stack traces", "System state", "Environment details"]
   },
   "tools": [
     "Debuggers (GDB, Chrome DevTools, etc.)",

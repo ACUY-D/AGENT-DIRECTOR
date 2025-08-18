@@ -6,8 +6,8 @@
  * - Lectura de contenidos (texto/base64) con inferencia de MIME
  */
 
-import { promises as fs, existsSync } from 'fs';
-import path from 'path';
+import { promises as fs, existsSync } from 'node:fs';
+import path from 'node:path';
 import { OrchestratorError, ValidationError } from '@core/errors';
 import { createLogger } from '@utils/logger';
 import { z } from 'zod';
@@ -139,8 +139,10 @@ export class ResourceRegistry {
   }
 
   static getInstance(): ResourceRegistry {
-    if (!this.instance) this.instance = new ResourceRegistry();
-    return this.instance;
+    if (!ResourceRegistry.instance) {
+      ResourceRegistry.instance = new ResourceRegistry();
+    }
+    return ResourceRegistry.instance;
   }
 
   /**

@@ -3,7 +3,7 @@
  * Runs test suites (unit, integration, e2e)
  */
 
-import { type ChildProcess, spawn } from 'child_process';
+import { type ChildProcess, spawn } from 'node:child_process';
 import { createLogger } from '@utils/logger';
 import { CLIConfig } from '../utils/config';
 import { getLogger } from '../utils/logger';
@@ -45,7 +45,7 @@ export class TestCommand {
         `Watch: ${config.test.watch ? 'Enabled' : 'Disabled'}`,
       ]);
 
-      const spinner = cliLogger.startSpinner(`Running ${config.test.suite} tests...`);
+      const _spinner = cliLogger.startSpinner(`Running ${config.test.suite} tests...`);
 
       try {
         const results = await this.runTests(config.test);
@@ -95,7 +95,6 @@ export class TestCommand {
             cwd: process.cwd(),
           });
           break;
-        case 'all':
         default:
           args.push('run');
           break;
@@ -122,21 +121,21 @@ export class TestCommand {
       let output = '';
       let errorOutput = '';
 
-      this.testProcess!.stdout?.on('data', (data) => {
+      this.testProcess?.stdout?.on('data', (data) => {
         output += data.toString();
         if (config.watch) {
           process.stdout.write(data);
         }
       });
 
-      this.testProcess!.stderr?.on('data', (data) => {
+      this.testProcess?.stderr?.on('data', (data) => {
         errorOutput += data.toString();
         if (config.watch) {
           process.stderr.write(data);
         }
       });
 
-      this.testProcess!.on('close', (code) => {
+      this.testProcess?.on('close', (code) => {
         // Parse test results from output
         const results = this.parseTestResults(output);
 
@@ -147,7 +146,7 @@ export class TestCommand {
         }
       });
 
-      this.testProcess!.on('error', (error) => {
+      this.testProcess?.on('error', (error) => {
         reject(error);
       });
     });
@@ -172,10 +171,18 @@ export class TestCommand {
     const skipMatch = output.match(/(\d+) skip/);
     const durationMatch = output.match(/Duration:\s+([\d.]+\w+)/);
 
-    if (passMatch) results.passed = Number.parseInt(passMatch[1]);
-    if (failMatch) results.failed = Number.parseInt(failMatch[1]);
-    if (skipMatch) results.skipped = Number.parseInt(skipMatch[1]);
-    if (durationMatch) results.duration = durationMatch[1];
+    if (passMatch) {
+      results.passed = Number.parseInt(passMatch[1]);
+    }
+    if (failMatch) {
+      results.failed = Number.parseInt(failMatch[1]);
+    }
+    if (skipMatch) {
+      results.skipped = Number.parseInt(skipMatch[1]);
+    }
+    if (durationMatch) {
+      results.duration = durationMatch[1];
+    }
 
     results.total = results.passed + results.failed + results.skipped;
 

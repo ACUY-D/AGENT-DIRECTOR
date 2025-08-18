@@ -262,7 +262,7 @@ export class DebuggerFixTool {
   /**
    * Get source code around error
    */
-  private async getSourceCode(file: string, line: number): Promise<string> {
+  private async getSourceCode(_file: string, line: number): Promise<string> {
     // This would read actual source files
     return `// Line ${line - 1}\n// Line ${line} <- Error here\n// Line ${line + 1}`;
   }
@@ -270,7 +270,7 @@ export class DebuggerFixTool {
   /**
    * Extract variables from context
    */
-  private async extractVariables(stackAnalysis: any): Promise<Record<string, any>> {
+  private async extractVariables(_stackAnalysis: any): Promise<Record<string, any>> {
     // This would extract actual variable values from runtime
     return {
       input: 'undefined',
@@ -348,8 +348,12 @@ export class DebuggerFixTool {
    * Detect severity from pattern
    */
   private detectSeverity(pattern: string): string {
-    if (pattern.includes('ERROR') || pattern.includes('FATAL')) return 'error';
-    if (pattern.includes('WARN')) return 'warning';
+    if (pattern.includes('ERROR') || pattern.includes('FATAL')) {
+      return 'error';
+    }
+    if (pattern.includes('WARN')) {
+      return 'warning';
+    }
     return 'info';
   }
 
@@ -365,10 +369,18 @@ export class DebuggerFixTool {
    * Extract log level
    */
   private extractLogLevel(log: string): string {
-    if (log.includes('ERROR')) return 'error';
-    if (log.includes('WARN')) return 'warn';
-    if (log.includes('INFO')) return 'info';
-    if (log.includes('DEBUG')) return 'debug';
+    if (log.includes('ERROR')) {
+      return 'error';
+    }
+    if (log.includes('WARN')) {
+      return 'warn';
+    }
+    if (log.includes('INFO')) {
+      return 'info';
+    }
+    if (log.includes('DEBUG')) {
+      return 'debug';
+    }
     return 'info';
   }
 
@@ -376,9 +388,15 @@ export class DebuggerFixTool {
    * Determine severity
    */
   private determineSeverity(errorInfo: any): 'low' | 'medium' | 'high' | 'critical' {
-    if (errorInfo.type === 'SyntaxError') return 'high';
-    if (errorInfo.type === 'TypeError') return 'high';
-    if (errorInfo.type === 'ReferenceError') return 'medium';
+    if (errorInfo.type === 'SyntaxError') {
+      return 'high';
+    }
+    if (errorInfo.type === 'TypeError') {
+      return 'high';
+    }
+    if (errorInfo.type === 'ReferenceError') {
+      return 'medium';
+    }
     return 'low';
   }
 
@@ -596,7 +614,7 @@ export class DebuggerFixTool {
   /**
    * Run verification tests
    */
-  private async runVerificationTests(fix: Fix): Promise<any> {
+  private async runVerificationTests(_fix: Fix): Promise<any> {
     // This would run actual tests
     await new Promise((resolve) => setTimeout(resolve, 200));
 
@@ -631,7 +649,7 @@ export class DebuggerFixTool {
   /**
    * Generate suggestions
    */
-  private async generateSuggestions(rootCause: RootCause, fixes: Fix[], verification: any[]): Promise<any[]> {
+  private async generateSuggestions(rootCause: RootCause, _fixes: Fix[], verification: any[]): Promise<any[]> {
     logger.debug('Generating suggestions');
 
     const suggestions = [];

@@ -181,7 +181,7 @@ program
         cliLogger.success('Configuration reset to defaults');
       } else if (options.edit) {
         // Open in default editor
-        const { spawn } = await import('child_process');
+        const { spawn } = await import('node:child_process');
         const editor = process.env.EDITOR || 'nano';
         spawn(editor, ['mcp-orchestrator.config.json'], { stdio: 'inherit' });
       } else if (key && value) {
@@ -191,7 +191,9 @@ program
         let obj: any = config;
 
         for (let i = 0; i < keys.length - 1; i++) {
-          if (!obj[keys[i]]) obj[keys[i]] = {};
+          if (!obj[keys[i]]) {
+            obj[keys[i]] = {};
+          }
           obj = obj[keys[i]];
         }
 

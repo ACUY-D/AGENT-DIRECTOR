@@ -527,7 +527,7 @@ export class DebuggerAgent extends BaseAgent {
   /**
    * Validate fix
    */
-  async validateFix(fix: Fix, test: unknown): Promise<boolean> {
+  async validateFix(fix: Fix, _test: unknown): Promise<boolean> {
     this.logger.debug('Validating fix', { fixId: fix.id });
 
     try {
@@ -577,7 +577,7 @@ export class DebuggerAgent extends BaseAgent {
   /**
    * Classify error
    */
-  private classifyError(message: string, stack?: string): string {
+  private classifyError(message: string, _stack?: string): string {
     const messageLower = message.toLowerCase();
 
     if (messageLower.includes('syntax') || messageLower.includes('unexpected token')) {
@@ -856,7 +856,7 @@ export class DebuggerAgent extends BaseAgent {
   /**
    * Generate logic fixes
    */
-  private generateLogicFixes(rootCause: RootCause): Fix[] {
+  private generateLogicFixes(_rootCause: RootCause): Fix[] {
     const fixes: Fix[] = [];
 
     fixes.push({
@@ -899,7 +899,7 @@ export class DebuggerAgent extends BaseAgent {
   /**
    * Generate data fixes
    */
-  private generateDataFixes(rootCause: RootCause): Fix[] {
+  private generateDataFixes(_rootCause: RootCause): Fix[] {
     const fixes: Fix[] = [];
 
     fixes.push({
@@ -942,7 +942,7 @@ export class DebuggerAgent extends BaseAgent {
   /**
    * Generate integration fixes
    */
-  private generateIntegrationFixes(rootCause: RootCause): Fix[] {
+  private generateIntegrationFixes(_rootCause: RootCause): Fix[] {
     const fixes: Fix[] = [];
 
     fixes.push({
@@ -985,7 +985,7 @@ export class DebuggerAgent extends BaseAgent {
   /**
    * Generate environment fixes
    */
-  private generateEnvironmentFixes(rootCause: RootCause): Fix[] {
+  private generateEnvironmentFixes(_rootCause: RootCause): Fix[] {
     const fixes: Fix[] = [];
 
     fixes.push({
@@ -1028,7 +1028,7 @@ export class DebuggerAgent extends BaseAgent {
   /**
    * Generate generic fixes
    */
-  private generateGenericFixes(rootCause: RootCause): Fix[] {
+  private generateGenericFixes(_rootCause: RootCause): Fix[] {
     const fixes: Fix[] = [];
 
     fixes.push({
@@ -1090,7 +1090,7 @@ export class DebuggerAgent extends BaseAgent {
     for (const log of logs) {
       // Extract log level
       const levelMatch = log.match(/\[(ERROR|WARN|INFO|DEBUG)\]/);
-      const level = levelMatch ? levelMatch[1] : 'INFO';
+      const _level = levelMatch ? levelMatch[1] : 'INFO';
 
       // Normalize log to find pattern
       const normalized = log
@@ -1210,14 +1210,14 @@ export class DebuggerAgent extends BaseAgent {
    * Generate log summary
    */
   private generateLogSummary(patterns: LogPattern[], anomalies: Anomaly[], timeline: LogEvent[]): string {
-    let summary = `Log Analysis Summary:\n\n`;
+    let summary = 'Log Analysis Summary:\n\n';
 
     summary += `Total Events: ${timeline.length}\n`;
     summary += `Patterns Found: ${patterns.length}\n`;
     summary += `Anomalies Detected: ${anomalies.length}\n\n`;
 
     if (patterns.length > 0) {
-      summary += `Top Patterns:\n`;
+      summary += 'Top Patterns:\n';
       for (const pattern of patterns.slice(0, 3)) {
         summary += `- ${pattern.pattern.substring(0, 50)}... (${pattern.count} occurrences)\n`;
       }
@@ -1225,7 +1225,7 @@ export class DebuggerAgent extends BaseAgent {
     }
 
     if (anomalies.length > 0) {
-      summary += `Critical Anomalies:\n`;
+      summary += 'Critical Anomalies:\n';
       for (const anomaly of anomalies.filter((a) => a.severity === 'high').slice(0, 3)) {
         summary += `- ${anomaly.type}: ${anomaly.description}\n`;
       }
@@ -1235,7 +1235,7 @@ export class DebuggerAgent extends BaseAgent {
     const errorCount = timeline.filter((e) => e.level === 'error' || e.level === 'fatal').length;
     const warnCount = timeline.filter((e) => e.level === 'warn').length;
 
-    summary += `Error Summary:\n`;
+    summary += 'Error Summary:\n';
     summary += `- Errors: ${errorCount}\n`;
     summary += `- Warnings: ${warnCount}\n`;
     summary += `- Error Rate: ${((errorCount / timeline.length) * 100).toFixed(1)}%`;
@@ -1466,8 +1466,8 @@ export class DebuggerAgent extends BaseAgent {
    * Detect memory leaks
    */
   async detectMemoryLeaks(
-    heapSnapshots?: unknown[],
-    timeRange?: number,
+    _heapSnapshots?: unknown[],
+    _timeRange?: number,
   ): Promise<
     Array<{
       location: string;
@@ -1506,7 +1506,7 @@ export class DebuggerAgent extends BaseAgent {
    */
   async traceExecution(
     entryPoint: string,
-    breakpoints?: string[],
+    _breakpoints?: string[],
   ): Promise<{
     steps: Array<{ step: number; location: string; variables: Record<string, unknown> }>;
     variables: Record<string, unknown>;

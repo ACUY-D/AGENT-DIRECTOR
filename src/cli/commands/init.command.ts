@@ -3,9 +3,9 @@
  * Initializes a new project with MCP orchestrator
  */
 
-import path from 'path';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import { createLogger } from '@utils/logger';
-import fs from 'fs/promises';
 import inquirer from 'inquirer';
 import { CLIConfig } from '../utils/config';
 import { getLogger } from '../utils/logger';
@@ -270,9 +270,9 @@ export class InitCommand {
       }
     } catch {
       // Git directory doesn't exist, initialize it
-      const { spawn } = await import('child_process');
+      const { spawn } = await import('node:child_process');
 
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve, _reject) => {
         const git = spawn('git', ['init'], {
           cwd: config.rootDir,
           stdio: 'ignore',
@@ -436,7 +436,7 @@ export class InitCommand {
     );
   }
 
-  private getTsConfig(config: ProjectConfig): string {
+  private getTsConfig(_config: ProjectConfig): string {
     return JSON.stringify(
       {
         compilerOptions: {
@@ -462,7 +462,7 @@ export class InitCommand {
     );
   }
 
-  private getGitignore(config: ProjectConfig): string {
+  private getGitignore(_config: ProjectConfig): string {
     return `# Dependencies
 node_modules/
 
@@ -502,7 +502,7 @@ Thumbs.db
 `;
   }
 
-  private getPythonGitignore(config: ProjectConfig): string {
+  private getPythonGitignore(_config: ProjectConfig): string {
     return `# Python
 __pycache__/
 *.py[cod]
@@ -544,7 +544,7 @@ env/
 `;
   }
 
-  private getGoGitignore(config: ProjectConfig): string {
+  private getGoGitignore(_config: ProjectConfig): string {
     return `# Binaries for programs and plugins
 *.exe
 *.exe~

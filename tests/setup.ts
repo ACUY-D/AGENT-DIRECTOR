@@ -1,5 +1,5 @@
-import { existsSync, mkdirSync, rmSync } from 'fs';
-import { join } from 'path';
+import { existsSync, mkdirSync, rmSync } from 'node:fs';
+import { join } from 'node:path';
 import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest';
 
 // Test directories

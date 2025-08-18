@@ -61,13 +61,7 @@
     ]
   },
   "metrics": {
-    "technical": [
-      "Performance metrics",
-      "Error rates",
-      "Latency percentiles",
-      "Throughput",
-      "Resource utilization"
-    ],
+    "technical": ["Performance metrics", "Error rates", "Latency percentiles", "Throughput", "Resource utilization"],
     "business": [
       "User engagement",
       "Conversion rates",
@@ -75,21 +69,9 @@
       "Revenue impact",
       "Cost per transaction"
     ],
-    "quality": [
-      "Code coverage",
-      "Defect density",
-      "MTTR/MTBF",
-      "Technical debt",
-      "Deployment frequency"
-    ]
+    "quality": ["Code coverage", "Defect density", "MTTR/MTBF", "Technical debt", "Deployment frequency"]
   },
-  "tools": [
-    "Google Analytics/Mixpanel",
-    "Grafana/Kibana",
-    "Jupyter/Python",
-    "SQL/BigQuery",
-    "Tableau/PowerBI"
-  ],
+  "tools": ["Google Analytics/Mixpanel", "Grafana/Kibana", "Jupyter/Python", "SQL/BigQuery", "Tableau/PowerBI"],
   "deliverables": [
     "Dashboards interactivos",
     "Reportes ejecutivos",
@@ -152,13 +134,7 @@
     }
   },
   "dataQuality": {
-    "dimensions": [
-      "Completeness",
-      "Consistency",
-      "Accuracy",
-      "Timeliness",
-      "Validity"
-    ],
+    "dimensions": ["Completeness", "Consistency", "Accuracy", "Timeliness", "Validity"],
     "validation": [
       "Schema validation",
       "Range checks",

@@ -3,10 +3,10 @@
  * Shows the current status of the pipeline and agents
  */
 
-import path from 'path';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import { CheckpointManager } from '@core/checkpoint';
 import { createLogger } from '@utils/logger';
-import fs from 'fs/promises';
 import { getLogger } from '../utils/logger';
 
 const cliLogger = getLogger();
@@ -75,7 +75,6 @@ export class StatusCommand {
         case 'markdown':
           await this.displayMarkdown(state);
           break;
-        case 'table':
         default:
           await this.displayTable(state, options.detailed || false);
           break;
@@ -489,11 +488,11 @@ export class StatusCommand {
 
     if (hours > 0) {
       return `${hours}h ${minutes % 60}m ${seconds % 60}s`;
-    } else if (minutes > 0) {
-      return `${minutes}m ${seconds % 60}s`;
-    } else {
-      return `${seconds}s`;
     }
+    if (minutes > 0) {
+      return `${minutes}m ${seconds % 60}s`;
+    }
+    return `${seconds}s`;
   }
 }
 

@@ -160,13 +160,13 @@ export class CLILogger {
    * Display a box with content
    */
   box(title: string, content: string | string[]): void {
-    console.log(chalk.cyan('┌─' + '─'.repeat(title.length + 2) + '─┐'));
+    console.log(chalk.cyan(`┌─${'─'.repeat(title.length + 2)}─┐`));
     console.log(chalk.cyan('│ ') + chalk.bold(title) + chalk.cyan(' │'));
-    console.log(chalk.cyan('└─' + '─'.repeat(title.length + 2) + '─┘'));
+    console.log(chalk.cyan(`└─${'─'.repeat(title.length + 2)}─┘`));
 
     const lines = Array.isArray(content) ? content : [content];
     lines.forEach((line) => {
-      console.log('  ' + line);
+      console.log(`  ${line}`);
     });
   }
 
@@ -214,7 +214,7 @@ export class CLILogger {
         if (typeof value === 'object' && value !== null) {
           this.tree(value, indent + connector, last);
         } else {
-          console.log(chalk.gray(indent + connector + '    └── ') + chalk.gray(String(value)));
+          console.log(chalk.gray(`${indent + connector}    └── `) + chalk.gray(String(value)));
         }
       });
     } else {

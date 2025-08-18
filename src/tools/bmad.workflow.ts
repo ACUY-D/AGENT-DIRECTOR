@@ -14,12 +14,14 @@ const logger = createLogger('bmad-workflow');
  */
 export const StartProjectInputSchema = z.object({
   objective: z.string().min(10),
-  context: z.object({
-    projectType: z.enum(['api', 'webapp', 'library', 'microservice', 'fullstack']).optional(),
-    technologies: z.array(z.string()).optional(),
-    constraints: z.array(z.string()).optional(),
-    team: z.array(z.string()).optional()
-  }).optional()
+  context: z
+    .object({
+      projectType: z.enum(['api', 'webapp', 'library', 'microservice', 'fullstack']).optional(),
+      technologies: z.array(z.string()).optional(),
+      constraints: z.array(z.string()).optional(),
+      team: z.array(z.string()).optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -35,8 +37,8 @@ export const StartProjectOutputSchema = z.object({
   methodology: z.object({
     framework: z.string(),
     phases: z.array(z.string()),
-    principles: z.array(z.string())
-  })
+    principles: z.array(z.string()),
+  }),
 });
 
 /**
@@ -45,7 +47,7 @@ export const StartProjectOutputSchema = z.object({
 export const PhaseGuidanceInputSchema = z.object({
   currentPhase: z.nativeEnum(BMADPhase),
   metrics: z.record(z.unknown()).optional(),
-  completedTasks: z.array(z.string()).optional()
+  completedTasks: z.array(z.string()).optional(),
 });
 
 /**
@@ -57,7 +59,7 @@ export const PhaseGuidanceOutputSchema = z.object({
   successCriteria: z.array(z.string()),
   rolesInvolved: z.array(z.nativeEnum(AgentRole)),
   expectedDeliverables: z.array(z.string()),
-  nextPhaseConditions: z.array(z.string())
+  nextPhaseConditions: z.array(z.string()),
 });
 
 export type StartProjectInput = z.infer<typeof StartProjectInputSchema>;
@@ -76,21 +78,16 @@ const BMAD_PHASES = {
       'Diseñar la arquitectura del sistema',
       'Implementar la funcionalidad core',
       'Escribir tests unitarios',
-      'Documentar el código'
+      'Documentar el código',
     ],
     roles: [AgentRole.ARCHITECT, AgentRole.DEVELOPER, AgentRole.TESTER],
-    deliverables: [
-      'Código fuente',
-      'Tests unitarios',
-      'Documentación técnica',
-      'Arquitectura del sistema'
-    ],
+    deliverables: ['Código fuente', 'Tests unitarios', 'Documentación técnica', 'Arquitectura del sistema'],
     successCriteria: [
       'Código implementado según especificaciones',
       'Tests pasando con >80% cobertura',
       'Documentación completa',
-      'Sin errores críticos'
-    ]
+      'Sin errores críticos',
+    ],
   },
   [BMADPhase.MEASURE]: {
     name: 'MEASURE - Medición',
@@ -99,21 +96,21 @@ const BMAD_PHASES = {
       'Medir cobertura de tests',
       'Evaluar rendimiento',
       'Analizar complejidad del código',
-      'Recopilar métricas de calidad'
+      'Recopilar métricas de calidad',
     ],
     roles: [AgentRole.TESTER, AgentRole.ANALYST],
     deliverables: [
       'Reporte de cobertura',
       'Métricas de rendimiento',
       'Análisis de complejidad',
-      'Dashboard de métricas'
+      'Dashboard de métricas',
     ],
     successCriteria: [
       'Métricas recopiladas completamente',
       'Benchmarks ejecutados',
       'Reportes generados',
-      'KPIs definidos y medidos'
-    ]
+      'KPIs definidos y medidos',
+    ],
   },
   [BMADPhase.ANALYZE]: {
     name: 'ANALYZE - Análisis',
@@ -122,21 +119,21 @@ const BMAD_PHASES = {
       'Analizar métricas recopiladas',
       'Identificar áreas de mejora',
       'Priorizar optimizaciones',
-      'Generar recomendaciones'
+      'Generar recomendaciones',
     ],
     roles: [AgentRole.ANALYST, AgentRole.ARCHITECT, AgentRole.DEBUGGER],
     deliverables: [
       'Reporte de análisis',
       'Lista de mejoras priorizadas',
       'Recomendaciones técnicas',
-      'Plan de optimización'
+      'Plan de optimización',
     ],
     successCriteria: [
       'Análisis completo de métricas',
       'Mejoras identificadas y priorizadas',
       'Plan de acción definido',
-      'Riesgos evaluados'
-    ]
+      'Riesgos evaluados',
+    ],
   },
   [BMADPhase.DEPLOY]: {
     name: 'DEPLOY - Despliegue',
@@ -145,22 +142,22 @@ const BMAD_PHASES = {
       'Preparar artefactos de despliegue',
       'Configurar entorno de producción',
       'Ejecutar despliegue',
-      'Validar en producción'
+      'Validar en producción',
     ],
     roles: [AgentRole.DEVOPS, AgentRole.TESTER],
     deliverables: [
       'Artefactos de despliegue',
       'Scripts de configuración',
       'Documentación de despliegue',
-      'Reporte de validación'
+      'Reporte de validación',
     ],
     successCriteria: [
       'Despliegue exitoso',
       'Tests de aceptación pasando',
       'Sin errores en producción',
-      'Monitoreo configurado'
-    ]
-  }
+      'Monitoreo configurado',
+    ],
+  },
 };
 
 /**
@@ -177,7 +174,7 @@ const PROJECT_WORKFLOWS = {
     'Configurar autenticación y autorización',
     'Optimizar rendimiento',
     'Preparar para despliegue',
-    'Validar en producción'
+    'Validar en producción',
   ],
   webapp: [
     'Analizar requisitos de UI/UX',
@@ -188,7 +185,7 @@ const PROJECT_WORKFLOWS = {
     'Optimizar bundle y rendimiento',
     'Configurar PWA si aplica',
     'Preparar build de producción',
-    'Desplegar y validar'
+    'Desplegar y validar',
   ],
   library: [
     'Definir API pública',
@@ -199,7 +196,7 @@ const PROJECT_WORKFLOWS = {
     'Configurar build y bundling',
     'Preparar para publicación',
     'Publicar en registry (npm)',
-    'Validar instalación y uso'
+    'Validar instalación y uso',
   ],
   microservice: [
     'Definir bounded context',
@@ -210,7 +207,7 @@ const PROJECT_WORKFLOWS = {
     'Configurar health checks',
     'Preparar containerización',
     'Configurar orquestación',
-    'Desplegar y monitorear'
+    'Desplegar y monitorear',
   ],
   fullstack: [
     'Analizar requisitos completos',
@@ -222,8 +219,8 @@ const PROJECT_WORKFLOWS = {
     'Optimizar rendimiento global',
     'Configurar CI/CD completo',
     'Desplegar stack completo',
-    'Validar flujo completo'
-  ]
+    'Validar flujo completo',
+  ],
 };
 
 /**
@@ -231,28 +228,28 @@ const PROJECT_WORKFLOWS = {
  */
 export async function startProject(input: StartProjectInput): Promise<StartProjectOutput> {
   const { objective, context } = input;
-  
+
   logger.info(`Iniciando proyecto con objetivo: ${objective}`);
-  
+
   // Generar ID único para el proyecto
   const projectId = `project_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  
+
   // Determinar tipo de proyecto si no se especifica
   const projectType = context?.projectType || detectProjectType(objective);
-  
+
   // Obtener flujo de trabajo según el tipo de proyecto
   const workflowSteps = PROJECT_WORKFLOWS[projectType] || generateGenericWorkflow(objective);
-  
+
   // El rol inicial siempre es Arquitecto en fase BUILD
   const initialRole = AgentRole.ARCHITECT;
   const phase = BMADPhase.BUILD;
-  
+
   // Generar instrucciones iniciales
   const instructions = generateInitialInstructions(objective, projectType, context);
-  
+
   // Estimar duración basada en complejidad
   const estimatedDuration = estimateProjectDuration(projectType, workflowSteps.length);
-  
+
   // Definir metodología BMAD
   const methodology = {
     framework: 'BMAD (Build, Measure, Analyze, Deploy)',
@@ -262,12 +259,12 @@ export async function startProject(input: StartProjectInput): Promise<StartProje
       'Medición basada en datos',
       'Análisis para mejora',
       'Despliegue automatizado',
-      'Calidad desde el inicio'
-    ]
+      'Calidad desde el inicio',
+    ],
   };
-  
+
   logger.info(`Proyecto ${projectId} iniciado como ${projectType} con rol inicial ${initialRole}`);
-  
+
   return {
     projectId,
     initialRole,
@@ -275,7 +272,7 @@ export async function startProject(input: StartProjectInput): Promise<StartProje
     instructions,
     workflowSteps,
     estimatedDuration,
-    methodology
+    methodology,
   };
 }
 
@@ -284,37 +281,34 @@ export async function startProject(input: StartProjectInput): Promise<StartProje
  */
 export async function getPhaseGuidance(input: PhaseGuidanceInput): Promise<PhaseGuidanceOutput> {
   const { currentPhase, metrics, completedTasks } = input;
-  
+
   logger.info(`Generando guía para fase ${currentPhase}`);
-  
+
   const phaseInfo = BMAD_PHASES[currentPhase];
-  
+
   if (!phaseInfo) {
     throw new Error(`Fase BMAD no reconocida: ${currentPhase}`);
   }
-  
+
   // Ajustar objetivos según tareas completadas
-  const phaseObjectives = adjustObjectivesByProgress(
-    phaseInfo.objectives,
-    completedTasks || []
-  );
-  
+  const phaseObjectives = adjustObjectivesByProgress(phaseInfo.objectives, completedTasks || []);
+
   // Generar pasos metodológicos específicos
   const methodologySteps = generateMethodologySteps(currentPhase, metrics);
-  
+
   // Criterios de éxito ajustados
   const successCriteria = phaseInfo.successCriteria;
-  
+
   // Condiciones para siguiente fase
   const nextPhaseConditions = generateNextPhaseConditions(currentPhase);
-  
+
   return {
     phaseObjectives,
     methodologySteps,
     successCriteria,
     rolesInvolved: phaseInfo.roles,
     expectedDeliverables: phaseInfo.deliverables,
-    nextPhaseConditions
+    nextPhaseConditions,
   };
 }
 
@@ -323,7 +317,7 @@ export async function getPhaseGuidance(input: PhaseGuidanceInput): Promise<Phase
  */
 function detectProjectType(objective: string): 'api' | 'webapp' | 'library' | 'microservice' | 'fullstack' {
   const lowerObjective = objective.toLowerCase();
-  
+
   if (lowerObjective.includes('api') || lowerObjective.includes('rest') || lowerObjective.includes('graphql')) {
     return 'api';
   }
@@ -336,7 +330,7 @@ function detectProjectType(objective: string): 'api' | 'webapp' | 'library' | 'm
   if (lowerObjective.includes('microservice') || lowerObjective.includes('servicio')) {
     return 'microservice';
   }
-  
+
   return 'fullstack';
 }
 
@@ -354,40 +348,36 @@ function generateGenericWorkflow(objective: string): string[] {
     'Preparar para despliegue',
     'Ejecutar despliegue',
     'Validar en entorno de producción',
-    'Documentar lecciones aprendidas'
+    'Documentar lecciones aprendidas',
   ];
 }
 
 /**
  * Generar instrucciones iniciales
  */
-function generateInitialInstructions(
-  objective: string,
-  projectType: string,
-  context?: any
-): string {
+function generateInitialInstructions(objective: string, projectType: string, context?: any): string {
   let instructions = `🚀 **Iniciando proyecto tipo ${projectType}**\n\n`;
   instructions += `**Objetivo:** ${objective}\n\n`;
-  instructions += `**Fase actual:** BUILD - Construcción\n`;
-  instructions += `**Rol inicial:** ARQUITECTO\n\n`;
-  instructions += `**Como Arquitecto, tu primera tarea es:**\n`;
-  instructions += `1. Analizar los requisitos del proyecto\n`;
-  instructions += `2. Diseñar la arquitectura de la solución\n`;
-  instructions += `3. Seleccionar las tecnologías apropiadas\n`;
-  instructions += `4. Crear el plan de trabajo (PLAN.md)\n`;
-  instructions += `5. Documentar decisiones arquitectónicas (ARCH.md)\n\n`;
-  
+  instructions += '**Fase actual:** BUILD - Construcción\n';
+  instructions += '**Rol inicial:** ARQUITECTO\n\n';
+  instructions += '**Como Arquitecto, tu primera tarea es:**\n';
+  instructions += '1. Analizar los requisitos del proyecto\n';
+  instructions += '2. Diseñar la arquitectura de la solución\n';
+  instructions += '3. Seleccionar las tecnologías apropiadas\n';
+  instructions += '4. Crear el plan de trabajo (PLAN.md)\n';
+  instructions += '5. Documentar decisiones arquitectónicas (ARCH.md)\n\n';
+
   if (context?.technologies?.length) {
     instructions += `**Tecnologías sugeridas:** ${context.technologies.join(', ')}\n`;
   }
-  
+
   if (context?.constraints?.length) {
     instructions += `**Restricciones a considerar:** ${context.constraints.join(', ')}\n`;
   }
-  
-  instructions += `\n**Metodología:** Seguiremos el framework BMAD con iteraciones continuas.\n`;
-  instructions += `Cada fase debe completarse con métricas y validación antes de avanzar.`;
-  
+
+  instructions += '\n**Metodología:** Seguiremos el framework BMAD con iteraciones continuas.\n';
+  instructions += 'Cada fase debe completarse con métricas y validación antes de avanzar.';
+
   return instructions;
 }
 
@@ -400,14 +390,20 @@ function estimateProjectDuration(projectType: string, stepsCount: number): strin
     webapp: 60,
     library: 30,
     microservice: 50,
-    fullstack: 100
+    fullstack: 100,
   };
-  
-  const hours = (baseHours[projectType] || 50) + (stepsCount * 2);
-  
-  if (hours < 40) return '1 semana';
-  if (hours < 80) return '2 semanas';
-  if (hours < 160) return '1 mes';
+
+  const hours = (baseHours[projectType] || 50) + stepsCount * 2;
+
+  if (hours < 40) {
+    return '1 semana';
+  }
+  if (hours < 80) {
+    return '2 semanas';
+  }
+  if (hours < 160) {
+    return '1 mes';
+  }
   return '2-3 meses';
 }
 
@@ -415,10 +411,8 @@ function estimateProjectDuration(projectType: string, stepsCount: number): strin
  * Ajustar objetivos según progreso
  */
 function adjustObjectivesByProgress(objectives: string[], completedTasks: string[]): string[] {
-  return objectives.map(obj => {
-    const isCompleted = completedTasks.some(task => 
-      task.toLowerCase().includes(obj.toLowerCase().substring(0, 20))
-    );
+  return objectives.map((obj) => {
+    const isCompleted = completedTasks.some((task) => task.toLowerCase().includes(obj.toLowerCase().substring(0, 20)));
     return isCompleted ? `✅ ${obj}` : `⬜ ${obj}`;
   });
 }
@@ -426,38 +420,38 @@ function adjustObjectivesByProgress(objectives: string[], completedTasks: string
 /**
  * Generar pasos metodológicos
  */
-function generateMethodologySteps(phase: BMADPhase, metrics?: Record<string, unknown>): string[] {
+function generateMethodologySteps(phase: BMADPhase, _metrics?: Record<string, unknown>): string[] {
   const steps: Record<BMADPhase, string[]> = {
     [BMADPhase.BUILD]: [
       'Aplicar principios SOLID en el diseño',
       'Implementar con TDD (Test-Driven Development)',
       'Realizar code reviews frecuentes',
       'Mantener documentación actualizada',
-      'Validar con stakeholders'
+      'Validar con stakeholders',
     ],
     [BMADPhase.MEASURE]: [
       'Ejecutar suite completa de tests',
       'Medir cobertura de código',
       'Realizar benchmarks de rendimiento',
       'Analizar complejidad ciclomática',
-      'Generar reportes de calidad'
+      'Generar reportes de calidad',
     ],
     [BMADPhase.ANALYZE]: [
       'Identificar patrones en las métricas',
       'Priorizar mejoras por impacto',
       'Evaluar deuda técnica',
       'Proponer optimizaciones',
-      'Crear plan de acción'
+      'Crear plan de acción',
     ],
     [BMADPhase.DEPLOY]: [
       'Preparar scripts de despliegue',
       'Configurar variables de entorno',
       'Ejecutar despliegue blue-green',
       'Validar health checks',
-      'Configurar monitoreo y alertas'
-    ]
+      'Configurar monitoreo y alertas',
+    ],
   };
-  
+
   return steps[phase] || [];
 }
 
@@ -470,28 +464,23 @@ function generateNextPhaseConditions(currentPhase: BMADPhase): string[] {
       'Código implementado y funcionando',
       'Tests unitarios pasando',
       'Documentación básica completa',
-      'Sin errores bloqueantes'
+      'Sin errores bloqueantes',
     ],
     [BMADPhase.MEASURE]: [
       'Métricas recopiladas completamente',
       'Reportes generados',
       'Benchmarks ejecutados',
-      'Datos listos para análisis'
+      'Datos listos para análisis',
     ],
     [BMADPhase.ANALYZE]: [
       'Análisis completo',
       'Mejoras identificadas',
       'Plan de acción definido',
-      'Prioridades establecidas'
+      'Prioridades establecidas',
     ],
-    [BMADPhase.DEPLOY]: [
-      'Despliegue exitoso',
-      'Validación completa',
-      'Sin errores en producción',
-      'Monitoreo activo'
-    ]
+    [BMADPhase.DEPLOY]: ['Despliegue exitoso', 'Validación completa', 'Sin errores en producción', 'Monitoreo activo'],
   };
-  
+
   return conditions[currentPhase] || [];
 }
 
@@ -503,12 +492,12 @@ export const bmadWorkflowTools = [
     name: 'workflow.startProject',
     description: 'Inicia un nuevo proyecto con metodología BMAD y define el flujo de trabajo',
     inputSchema: StartProjectInputSchema,
-    handler: startProject
+    handler: startProject,
   },
   {
     name: 'bmad.getPhaseGuidance',
     description: 'Obtiene guía detallada para la fase BMAD actual',
     inputSchema: PhaseGuidanceInputSchema,
-    handler: getPhaseGuidance
-  }
+    handler: getPhaseGuidance,
+  },
 ];

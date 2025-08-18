@@ -5,8 +5,8 @@
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { AVAILABLE_TOOLS, getToolsDescription, registerTools } from './tools';
 import { createLogger } from './utils/logger';
-import { registerTools, AVAILABLE_TOOLS, getToolsDescription } from './tools';
 
 const logger = createLogger('mcp-role-director');
 
@@ -27,7 +27,7 @@ const DEFAULT_CONFIG: ServerConfig = {
   name: '@mcp/role-director',
   version: '1.0.0',
   description: 'MCP server que proporciona dirección de roles y metodología BMAD',
-  logLevel: process.env.LOG_LEVEL as any || 'info'
+  logLevel: (process.env.LOG_LEVEL as any) || 'info',
 };
 
 /**
@@ -46,7 +46,7 @@ async function startServer(): Promise<void> {
       {
         capabilities: {
           tools: {},
-          resources: {}
+          resources: {},
         },
       },
     );
@@ -54,9 +54,9 @@ async function startServer(): Promise<void> {
     // Registrar herramientas de director de roles
     logger.info('Registrando herramientas de director de roles...');
     await registerTools(server);
-    
+
     logger.info(`${AVAILABLE_TOOLS.length} herramientas registradas exitosamente:`);
-    logger.info('\n' + getToolsDescription());
+    logger.info(`\n${getToolsDescription()}`);
 
     // Manejador de solicitudes de información del servidor
     server.setRequestHandler('server/info' as any, async () => {
@@ -66,8 +66,8 @@ async function startServer(): Promise<void> {
         description: DEFAULT_CONFIG.description,
         capabilities: {
           tools: true,
-          resources: true
-        }
+          resources: true,
+        },
       };
     });
 
@@ -77,7 +77,7 @@ async function startServer(): Promise<void> {
         status: 'healthy',
         timestamp: new Date().toISOString(),
         uptime: process.uptime(),
-        tools: AVAILABLE_TOOLS.length
+        tools: AVAILABLE_TOOLS.length,
       };
     });
 
@@ -98,7 +98,6 @@ async function startServer(): Promise<void> {
     logger.info('=====================================');
     logger.info('Modo: Guía de roles y metodología BMAD');
     logger.info('Esperando conexiones de clientes...');
-    
   } catch (error) {
     logger.error('Error al iniciar el servidor:', error);
     throw error;
@@ -126,9 +125,9 @@ function setupErrorHandlers(): void {
 function setupSignalHandlers(): void {
   const gracefulShutdown = async (signal: string) => {
     logger.info(`Recibida señal ${signal}, cerrando servidor...`);
-    
+
     // Aquí podrías agregar lógica de limpieza si fuera necesaria
-    
+
     logger.info('Servidor cerrado correctamente');
     process.exit(0);
   };
@@ -151,7 +150,7 @@ async function main(): Promise<void> {
     logger.info('- Metodología BMAD estructurada');
     logger.info('- Transiciones inteligentes entre roles');
     logger.info('');
-    
+
     await startServer();
   } catch (error) {
     logger.error('Error fatal al iniciar:', error);
@@ -169,22 +168,18 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 }
 
 // Exportar para testing y uso programático
-export { 
-  startServer,
-  ServerConfig,
-  DEFAULT_CONFIG
-};
+export { startServer, type ServerConfig, DEFAULT_CONFIG };
 
 // Re-exportar herramientas disponibles
-export { 
+export {
   AVAILABLE_TOOLS,
   getToolsDescription,
   getToolByName,
-  hasTool
+  hasTool,
 } from './tools';
 
 // Re-exportar tipos de roles y fases
-export { 
+export {
   AgentRole,
-  BMADPhase
+  BMADPhase,
 } from './tools/role.director';

@@ -3,7 +3,7 @@
  * Starts development server with watch mode and hot reload
  */
 
-import { type ChildProcess, spawn } from 'child_process';
+import { type ChildProcess, spawn } from 'node:child_process';
 import { createLogger } from '@utils/logger';
 import chokidar from 'chokidar';
 import { CLIConfig } from '../utils/config';
@@ -49,7 +49,7 @@ export class DevCommand {
       ]);
 
       // Start dev server
-      const spinner = cliLogger.startSpinner('Starting development server...');
+      const _spinner = cliLogger.startSpinner('Starting development server...');
 
       try {
         // Check for TypeScript project
@@ -90,8 +90,8 @@ export class DevCommand {
    * Check if project is TypeScript
    */
   private async isTypeScriptProject(): Promise<boolean> {
-    const fs = await import('fs/promises');
-    const path = await import('path');
+    const fs = await import('node:fs/promises');
+    const path = await import('node:path');
 
     try {
       await fs.access(path.join(process.cwd(), 'tsconfig.json'));
@@ -184,15 +184,21 @@ export class DevCommand {
     this.watcher
       .on('add', (path) => {
         cliLogger.info(`File added: ${path}`);
-        if (hotReload) this.reload();
+        if (hotReload) {
+          this.reload();
+        }
       })
       .on('change', (path) => {
         cliLogger.info(`File changed: ${path}`);
-        if (hotReload) this.reload();
+        if (hotReload) {
+          this.reload();
+        }
       })
       .on('unlink', (path) => {
         cliLogger.info(`File removed: ${path}`);
-        if (hotReload) this.reload();
+        if (hotReload) {
+          this.reload();
+        }
       });
 
     logger.debug('File watcher initialized');

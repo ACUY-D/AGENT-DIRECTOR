@@ -178,7 +178,9 @@ export class DeveloperImplementTool {
   private async configureCodingStandards(standards?: any): Promise<void> {
     logger.debug('Configuring coding standards', standards);
 
-    if (!standards) return;
+    if (!standards) {
+      return;
+    }
 
     // Configure linter
     if (standards.linter) {
@@ -314,19 +316,23 @@ export class DeveloperImplementTool {
   /**
    * Generate file content
    */
-  private async generateFileContent(filePath: string, plan: any): Promise<string> {
+  private async generateFileContent(filePath: string, _plan: any): Promise<string> {
     logger.debug('Generating file content', { filePath });
 
     // Determine file type and generate appropriate content
     if (filePath.includes('interface')) {
       return this.generateInterfaceContent(filePath);
-    } else if (filePath.includes('service')) {
+    }
+    if (filePath.includes('service')) {
       return this.generateServiceContent(filePath);
-    } else if (filePath.includes('repository')) {
+    }
+    if (filePath.includes('repository')) {
       return this.generateRepositoryContent(filePath);
-    } else if (filePath.includes('controller')) {
+    }
+    if (filePath.includes('controller')) {
       return this.generateControllerContent(filePath);
-    } else if (filePath.includes('validator')) {
+    }
+    if (filePath.includes('validator')) {
       return this.generateValidatorContent(filePath);
     }
 
@@ -594,7 +600,7 @@ export class ${name}Validator {
   /**
    * Generate test content
    */
-  private async generateTestContent(filePath: string, fileContent: string): Promise<string> {
+  private async generateTestContent(filePath: string, _fileContent: string): Promise<string> {
     const name = this.extractName(filePath);
     const type = this.extractType(filePath);
 
@@ -643,10 +649,18 @@ describe('${name}${type}', () => {
    * Extract type from file path
    */
   private extractType(filePath: string): string {
-    if (filePath.includes('service')) return 'Service';
-    if (filePath.includes('repository')) return 'Repository';
-    if (filePath.includes('controller')) return 'Controller';
-    if (filePath.includes('validator')) return 'Validator';
+    if (filePath.includes('service')) {
+      return 'Service';
+    }
+    if (filePath.includes('repository')) {
+      return 'Repository';
+    }
+    if (filePath.includes('controller')) {
+      return 'Controller';
+    }
+    if (filePath.includes('validator')) {
+      return 'Validator';
+    }
     return '';
   }
 
@@ -654,11 +668,21 @@ describe('${name}${type}', () => {
    * Extract purpose from file path
    */
   private extractPurpose(filePath: string): string {
-    if (filePath.includes('interface')) return 'Type definitions';
-    if (filePath.includes('service')) return 'Business logic';
-    if (filePath.includes('repository')) return 'Data access';
-    if (filePath.includes('controller')) return 'HTTP handling';
-    if (filePath.includes('validator')) return 'Input validation';
+    if (filePath.includes('interface')) {
+      return 'Type definitions';
+    }
+    if (filePath.includes('service')) {
+      return 'Business logic';
+    }
+    if (filePath.includes('repository')) {
+      return 'Data access';
+    }
+    if (filePath.includes('controller')) {
+      return 'HTTP handling';
+    }
+    if (filePath.includes('validator')) {
+      return 'Input validation';
+    }
     return 'Implementation';
   }
 
@@ -727,7 +751,7 @@ describe('${name}${type}', () => {
     logger.debug('Generating additional tests');
 
     // Generate tests for files without test coverage
-    for (const [path, file] of this.filesModified) {
+    for (const [path, _file] of this.filesModified) {
       if (!this.testsGenerated.find((t) => t.file.includes(path))) {
         this.testsGenerated.push({
           file: `tests/unit/${path}.test.ts`,
@@ -776,7 +800,7 @@ describe('${name}${type}', () => {
 
     if (strategy === 'atomic') {
       // Commit each file separately
-      for (const [path, file] of this.filesModified) {
+      for (const [path, _file] of this.filesModified) {
         this.commits.push({
           hash: uuidv4().substring(0, 7),
           message: `feat: add ${path}`,
