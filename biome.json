@@ -71,19 +71,7 @@
         "useConst": "error",
         "useSingleVarDeclarator": "error"
       }
-    },
-    "overrides": [
-      {
-        "include": ["examples/**/*"],
-        "linter": {
-          "rules": {
-            "suspicious": {
-              "noConsoleLog": "off"
-            }
-          }
-        }
-      }
-    ]
+    }
   },
   "formatter": {
     "enabled": true,
@@ -104,6 +92,6 @@
     }
   },
   "files": {
-    "ignore": ["node_modules", "dist", "coverage", ".kilo/state", "*.min.js", "*.d.ts"]
+    "ignore": ["node_modules", "dist", "coverage", ".kilo/state", "*.min.js", "*.d.ts", "examples/**/*"]
   }
 }
