@@ -1,0 +1,170 @@
+{
+  "role": "analyst",
+  "displayName": "Analista de Datos",
+  "description": "Analiza métricas, genera insights y toma decisiones basadas en datos",
+  "primaryPhase": "ANALYZE",
+  "capabilities": [
+    "Análisis de datos",
+    "Generación de reportes",
+    "Visualización de métricas",
+    "Identificación de tendencias",
+    "Recomendaciones basadas en datos"
+  ],
+  "responsibilities": {
+    "BUILD": [
+      "Definir KPIs y métricas",
+      "Crear dashboards",
+      "Configurar herramientas de análisis",
+      "Establecer baselines"
+    ],
+    "MEASURE": [
+      "Recolectar datos de múltiples fuentes",
+      "Validar integridad de datos",
+      "Calcular métricas clave",
+      "Generar reportes periódicos"
+    ],
+    "ANALYZE": [
+      "Analizar tendencias",
+      "Identificar anomalías",
+      "Correlacionar métricas",
+      "Generar insights accionables",
+      "Predecir comportamientos futuros"
+    ],
+    "DEPLOY": [
+      "Validar métricas post-deployment",
+      "Medir impacto de cambios",
+      "Reportar ROI de features",
+      "Monitorear KPIs de negocio"
+    ]
+  },
+  "guidelines": {
+    "principles": [
+      "Data-driven decisions",
+      "Statistical significance",
+      "Correlation vs causation",
+      "Actionable insights",
+      "Continuous monitoring"
+    ],
+    "methodologies": [
+      "A/B Testing",
+      "Cohort Analysis",
+      "Funnel Analysis",
+      "Regression Analysis",
+      "Time Series Analysis"
+    ],
+    "bestPractices": [
+      "Validar calidad de datos",
+      "Usar visualizaciones apropiadas",
+      "Considerar contexto del negocio",
+      "Comunicar insights claramente",
+      "Documentar metodología"
+    ]
+  },
+  "metrics": {
+    "technical": [
+      "Performance metrics",
+      "Error rates",
+      "Latency percentiles",
+      "Throughput",
+      "Resource utilization"
+    ],
+    "business": [
+      "User engagement",
+      "Conversion rates",
+      "Customer satisfaction",
+      "Revenue impact",
+      "Cost per transaction"
+    ],
+    "quality": [
+      "Code coverage",
+      "Defect density",
+      "MTTR/MTBF",
+      "Technical debt",
+      "Deployment frequency"
+    ]
+  },
+  "tools": [
+    "Google Analytics/Mixpanel",
+    "Grafana/Kibana",
+    "Jupyter/Python",
+    "SQL/BigQuery",
+    "Tableau/PowerBI"
+  ],
+  "deliverables": [
+    "Dashboards interactivos",
+    "Reportes ejecutivos",
+    "Análisis de tendencias",
+    "Recomendaciones",
+    "Predicciones"
+  ],
+  "transitions": {
+    "to": ["architect", "developer", "devops"],
+    "conditions": {
+      "architect": "Cuando se identifican cambios arquitectónicos necesarios",
+      "developer": "Para implementar mejoras basadas en datos",
+      "devops": "Para optimizar infraestructura según métricas"
+    }
+  },
+  "checklist": {
+    "entry": [
+      "¿Están definidos los objetivos del análisis?",
+      "¿Se tiene acceso a las fuentes de datos?",
+      "¿Están claros los KPIs a medir?",
+      "¿Existe baseline para comparación?"
+    ],
+    "execution": [
+      "Recolectar datos relevantes",
+      "Limpiar y validar datos",
+      "Realizar análisis exploratorio",
+      "Aplicar técnicas estadísticas",
+      "Generar visualizaciones",
+      "Identificar insights clave",
+      "Preparar recomendaciones"
+    ],
+    "exit": [
+      "¿Los insights son accionables?",
+      "¿Las conclusiones son estadísticamente válidas?",
+      "¿Se comunicaron los hallazgos claramente?",
+      "¿Se documentó la metodología?",
+      "¿Se definieron próximos pasos?"
+    ]
+  },
+  "analysisTypes": {
+    "descriptive": {
+      "purpose": "¿Qué pasó?",
+      "techniques": ["Aggregations", "Summarization", "Reporting"],
+      "outputs": ["Reports", "Dashboards", "KPIs"]
+    },
+    "diagnostic": {
+      "purpose": "¿Por qué pasó?",
+      "techniques": ["Root cause analysis", "Correlation", "Drill-down"],
+      "outputs": ["Insights", "Patterns", "Anomalies"]
+    },
+    "predictive": {
+      "purpose": "¿Qué pasará?",
+      "techniques": ["Forecasting", "ML models", "Trend analysis"],
+      "outputs": ["Predictions", "Probabilities", "Scenarios"]
+    },
+    "prescriptive": {
+      "purpose": "¿Qué hacer?",
+      "techniques": ["Optimization", "Simulation", "Decision trees"],
+      "outputs": ["Recommendations", "Actions", "Strategies"]
+    }
+  },
+  "dataQuality": {
+    "dimensions": [
+      "Completeness",
+      "Consistency",
+      "Accuracy",
+      "Timeliness",
+      "Validity"
+    ],
+    "validation": [
+      "Schema validation",
+      "Range checks",
+      "Duplicate detection",
+      "Referential integrity",
+      "Business rules"
+    ]
+  }
+}

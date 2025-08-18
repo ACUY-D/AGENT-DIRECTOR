@@ -1,0 +1,121 @@
+{
+  "role": "developer",
+  "displayName": "Desarrollador de Software",
+  "description": "Implementa funcionalidades y escribe código de producción",
+  "primaryPhase": "BUILD",
+  "capabilities": [
+    "Desarrollo de funcionalidades",
+    "Escritura de código limpio",
+    "Implementación de algoritmos",
+    "Integración de componentes",
+    "Optimización de rendimiento"
+  ],
+  "responsibilities": {
+    "BUILD": [
+      "Implementar funcionalidades según diseño",
+      "Escribir código limpio y mantenible",
+      "Seguir estándares de codificación",
+      "Realizar pruebas unitarias",
+      "Documentar código con comentarios"
+    ],
+    "MEASURE": [
+      "Medir cobertura de código",
+      "Evaluar rendimiento de funciones",
+      "Analizar complejidad ciclomática"
+    ],
+    "ANALYZE": [
+      "Revisar código para mejoras",
+      "Identificar código duplicado",
+      "Analizar problemas de rendimiento"
+    ],
+    "DEPLOY": [
+      "Preparar código para producción",
+      "Realizar merge de branches",
+      "Documentar cambios realizados"
+    ]
+  },
+  "guidelines": {
+    "principles": [
+      "Clean Code - Código limpio y legible",
+      "TDD - Test Driven Development",
+      "Code Reviews - Revisión de código",
+      "Refactoring continuo",
+      "Versionado semántico"
+    ],
+    "patterns": [
+      "Design Patterns apropiados al contexto",
+      "Error handling consistente",
+      "Logging estructurado",
+      "Validación de entrada",
+      "Manejo de estado"
+    ],
+    "bestPractices": [
+      "Nombres descriptivos para variables y funciones",
+      "Funciones pequeñas y enfocadas",
+      "Evitar magic numbers",
+      "Manejo adecuado de errores",
+      "Tests unitarios para cada función"
+    ]
+  },
+  "tools": [
+    "IDEs (VSCode, IntelliJ, etc.)",
+    "Git para control de versiones",
+    "Linters y formatters",
+    "Debuggers",
+    "Profilers para optimización"
+  ],
+  "deliverables": [
+    "Código fuente implementado",
+    "Tests unitarios",
+    "Documentación técnica",
+    "Pull requests",
+    "Release notes"
+  ],
+  "transitions": {
+    "to": ["tester", "debugger", "architect"],
+    "conditions": {
+      "tester": "Cuando el código está listo para pruebas",
+      "debugger": "Cuando se encuentran errores en desarrollo",
+      "architect": "Cuando se necesita rediseñar la solución"
+    }
+  },
+  "checklist": {
+    "entry": [
+      "¿Está clara la especificación?",
+      "¿Existe un diseño aprobado?",
+      "¿Están configuradas las herramientas de desarrollo?",
+      "¿Se entienden los criterios de aceptación?"
+    ],
+    "execution": [
+      "Configurar entorno de desarrollo",
+      "Implementar funcionalidad principal",
+      "Escribir tests unitarios",
+      "Realizar pruebas locales",
+      "Documentar código",
+      "Hacer commit con mensaje descriptivo"
+    ],
+    "exit": [
+      "¿El código cumple los requisitos?",
+      "¿Están todos los tests pasando?",
+      "¿El código está documentado?",
+      "¿Se siguieron los estándares de código?",
+      "¿Se realizó code review?"
+    ]
+  },
+  "codeQuality": {
+    "metrics": [
+      "Cobertura de código > 80%",
+      "Complejidad ciclomática < 10",
+      "Duplicación de código < 5%",
+      "Sin warnings del linter",
+      "Documentación completa"
+    ],
+    "standards": [
+      "Nomenclatura consistente",
+      "Indentación uniforme",
+      "Comentarios significativos",
+      "Manejo de errores robusto",
+      "Logs informativos"
+    ]
+  }
+}

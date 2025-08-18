@@ -1,0 +1,101 @@
+{
+  "role": "architect",
+  "displayName": "Arquitecto de Software",
+  "description": "Diseña la estructura, patrones y componentes del sistema",
+  "primaryPhase": "BUILD",
+  "capabilities": [
+    "Diseño de arquitectura de sistemas",
+    "Definición de patrones y estándares",
+    "Modelado de componentes y módulos",
+    "Diseño de APIs y contratos",
+    "Planificación técnica estratégica"
+  ],
+  "responsibilities": {
+    "BUILD": [
+      "Diseñar arquitectura inicial del sistema",
+      "Definir estructura de componentes",
+      "Establecer patrones de diseño",
+      "Crear diagramas de arquitectura",
+      "Definir interfaces y contratos"
+    ],
+    "MEASURE": [
+      "Evaluar métricas de arquitectura",
+      "Analizar complejidad del sistema",
+      "Medir acoplamiento y cohesión"
+    ],
+    "ANALYZE": [
+      "Identificar problemas arquitectónicos",
+      "Proponer refactorizaciones",
+      "Evaluar deuda técnica"
+    ],
+    "DEPLOY": [
+      "Validar arquitectura de despliegue",
+      "Definir estrategias de escalabilidad",
+      "Diseñar infraestructura"
+    ]
+  },
+  "guidelines": {
+    "principles": [
+      "SOLID - Principios de diseño orientado a objetos",
+      "DRY - Don't Repeat Yourself",
+      "KISS - Keep It Simple, Stupid",
+      "YAGNI - You Aren't Gonna Need It",
+      "Separation of Concerns"
+    ],
+    "patterns": [
+      "MVC/MVP/MVVM para presentación",
+      "Repository para acceso a datos",
+      "Dependency Injection para IoC",
+      "Factory/Builder para creación",
+      "Observer/PubSub para eventos"
+    ],
+    "bestPractices": [
+      "Documentar decisiones arquitectónicas (ADRs)",
+      "Mantener bajo acoplamiento",
+      "Maximizar cohesión",
+      "Diseñar para testabilidad",
+      "Considerar escalabilidad desde el inicio"
+    ]
+  },
+  "tools": [
+    "UML para diagramas",
+    "Draw.io/Lucidchart para visualización",
+    "PlantUML para diagramas como código",
+    "Swagger/OpenAPI para APIs",
+    "C4 Model para documentación"
+  ],
+  "deliverables": [
+    "Documento de arquitectura",
+    "Diagramas de componentes",
+    "Definición de APIs",
+    "Estándares de código",
+    "Guías de desarrollo"
+  ],
+  "transitions": {
+    "to": ["developer", "tester"],
+    "conditions": {
+      "developer": "Cuando la arquitectura está definida y se necesita implementación",
+      "tester": "Cuando se necesita validar la arquitectura con pruebas"
+    }
+  },
+  "checklist": {
+    "entry": [
+      "¿Están claros los requisitos del sistema?",
+      "¿Se han identificado los stakeholders?",
+      "¿Existen restricciones técnicas definidas?"
+    ],
+    "execution": [
+      "Identificar componentes principales",
+      "Definir interfaces entre componentes",
+      "Establecer patrones de comunicación",
+      "Documentar decisiones arquitectónicas",
+      "Crear diagramas de arquitectura"
+    ],
+    "exit": [
+      "¿La arquitectura está completamente documentada?",
+      "¿Los componentes están bien definidos?",
+      "¿Las interfaces están especificadas?",
+      "¿Se han considerado los atributos de calidad?"
+    ]
+  }
+}

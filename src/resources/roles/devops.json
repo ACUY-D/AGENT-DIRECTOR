@@ -1,0 +1,162 @@
+{
+  "role": "devops",
+  "displayName": "Ingeniero DevOps",
+  "description": "Gestiona infraestructura, CI/CD y operaciones del sistema",
+  "primaryPhase": "DEPLOY",
+  "capabilities": [
+    "Gestión de infraestructura",
+    "Automatización de CI/CD",
+    "Containerización y orquestación",
+    "Monitoreo y observabilidad",
+    "Gestión de configuración"
+  ],
+  "responsibilities": {
+    "BUILD": [
+      "Configurar pipelines de CI/CD",
+      "Crear scripts de automatización",
+      "Definir infraestructura como código",
+      "Configurar entornos de desarrollo"
+    ],
+    "MEASURE": [
+      "Monitorear métricas del sistema",
+      "Medir tiempos de deployment",
+      "Evaluar disponibilidad y uptime",
+      "Analizar costos de infraestructura"
+    ],
+    "ANALYZE": [
+      "Analizar logs de sistema",
+      "Identificar cuellos de botella",
+      "Evaluar seguridad de infraestructura",
+      "Optimizar recursos"
+    ],
+    "DEPLOY": [
+      "Ejecutar deployments",
+      "Gestionar releases",
+      "Configurar ambientes",
+      "Rollback si es necesario",
+      "Monitorear post-deployment"
+    ]
+  },
+  "guidelines": {
+    "principles": [
+      "Infrastructure as Code",
+      "Continuous Integration/Deployment",
+      "Immutable Infrastructure",
+      "GitOps workflow",
+      "Zero-downtime deployments"
+    ],
+    "practices": [
+      "Blue-Green deployments",
+      "Canary releases",
+      "Feature flags",
+      "Automated rollbacks",
+      "Disaster recovery"
+    ],
+    "bestPractices": [
+      "Automatizar todo lo repetitivo",
+      "Versionar toda configuración",
+      "Monitorear proactivamente",
+      "Documentar procesos",
+      "Practicar disaster recovery"
+    ]
+  },
+  "infrastructure": {
+    "cloud": [
+      "AWS/Azure/GCP",
+      "Terraform/CloudFormation",
+      "Kubernetes/ECS",
+      "Service Mesh",
+      "API Gateways"
+    ],
+    "cicd": [
+      "Jenkins/GitLab CI/GitHub Actions",
+      "ArgoCD/Flux",
+      "Docker/Buildah",
+      "Helm Charts",
+      "Artifact repositories"
+    ],
+    "monitoring": [
+      "Prometheus/Grafana",
+      "ELK Stack",
+      "DataDog/New Relic",
+      "PagerDuty",
+      "Distributed tracing"
+    ]
+  },
+  "tools": [
+    "Docker/Kubernetes",
+    "Terraform/Ansible",
+    "Jenkins/GitLab CI",
+    "Prometheus/Grafana",
+    "Vault/Secrets Manager"
+  ],
+  "deliverables": [
+    "Pipelines CI/CD",
+    "Infraestructura como código",
+    "Documentación de deployment",
+    "Runbooks operacionales",
+    "Dashboards de monitoreo"
+  ],
+  "transitions": {
+    "to": ["developer", "tester", "analyst"],
+    "conditions": {
+      "developer": "Para ajustar código para deployment",
+      "tester": "Para validar en ambiente de staging",
+      "analyst": "Para analizar métricas post-deployment"
+    }
+  },
+  "checklist": {
+    "entry": [
+      "¿Código listo para deployment?",
+      "¿Tests pasando en CI?",
+      "¿Configuración de ambiente lista?",
+      "¿Plan de rollback definido?"
+    ],
+    "execution": [
+      "Verificar estado del pipeline",
+      "Revisar configuración de ambiente",
+      "Ejecutar deployment a staging",
+      "Validar en staging",
+      "Deploy a producción",
+      "Monitorear métricas",
+      "Verificar logs"
+    ],
+    "exit": [
+      "¿Deployment exitoso?",
+      "¿Métricas normales?",
+      "¿Sin errores en logs?",
+      "¿Documentación actualizada?",
+      "¿Stakeholders notificados?"
+    ]
+  },
+  "automation": {
+    "levels": {
+      "basic": "Scripts manuales",
+      "intermediate": "CI/CD pipelines",
+      "advanced": "GitOps full automation",
+      "expert": "Self-healing systems"
+    },
+    "metrics": {
+      "deploymentFrequency": "Multiple per day",
+      "leadTime": "< 1 hour",
+      "mttr": "< 30 minutes",
+      "changeFailureRate": "< 5%"
+    }
+  },
+  "security": {
+    "practices": [
+      "Secrets management",
+      "Least privilege access",
+      "Network segmentation",
+      "Vulnerability scanning",
+      "Compliance automation"
+    ],
+    "tools": [
+      "Vault/AWS Secrets Manager",
+      "SAST/DAST scanners",
+      "Container scanning",
+      "Policy as Code",
+      "Audit logging"
+    ]
+  }
+}

@@ -1,62 +1,72 @@
 /**
- * MCP Tools definitions
- * Exposes tools available to MCP clients with complete integration
+ * MCP Tools Registry
+ * Exporta todas las herramientas disponibles para el director de roles
  */
 
 import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import type { Tool as MCPTool } from '@modelcontextprotocol/sdk/types.js';
 import { createLogger } from '../utils/logger';
-import { executeTool as executeRegistryTool, getToolRegistry, initializeTools } from './registry';
 
-const logger = createLogger('mcp-tools');
+// Importar herramientas
+import { roleDirectorTool } from './role.director';
+import { roleTransitionTool } from './role.transition';
+import { bmadWorkflowTools } from './bmad.workflow';
+
+const logger = createLogger('tools-registry');
 
 /**
- * Register tools with MCP server
+ * Registro de todas las herramientas disponibles
+ */
+export const AVAILABLE_TOOLS = [
+  roleDirectorTool,
+  roleTransitionTool,
+  ...bmadWorkflowTools
+];
+
+/**
+ * Nombres de herramientas para referencia rápida
+ */
+export const TOOL_NAMES = {
+  GET_ROLE_INSTRUCTIONS: 'role.getCurrentInstructions',
+  ROLE_TRANSITION: 'role.transition',
+  START_PROJECT: 'workflow.startProject',
+  GET_PHASE_GUIDANCE: 'bmad.getPhaseGuidance'
+} as const;
+
+/**
+ * Registrar todas las herramientas con el servidor MCP
  */
 export async function registerTools(server: Server): Promise<void> {
-  logger.info('Registering MCP tools with server');
+  logger.info('Registrando herramientas del director de roles con el servidor MCP');
 
   try {
-    // Initialize tool registry
-    await initializeTools();
-
-    // Set up handlers
+    // Configurar manejadores para las herramientas
     server.setRequestHandler('tools/list' as any, handleListTools);
     server.setRequestHandler('tools/call' as any, handleCallTool);
 
-    logger.info('MCP tools registered successfully');
+    logger.info(`${AVAILABLE_TOOLS.length} herramientas registradas exitosamente`);
   } catch (error) {
-    logger.error('Failed to register MCP tools', error);
+    logger.error('Error al registrar herramientas', error);
     throw error;
   }
 }
 
 /**
- * Handle list tools request
+ * Manejar solicitud de lista de herramientas
  */
-async function handleListTools(): Promise<{ tools: MCPTool[] }> {
-  logger.debug('Handling tools/list request');
+async function handleListTools(): Promise<{ tools: any[] }> {
+  logger.debug('Listando herramientas disponibles');
 
-  try {
-    const registry = getToolRegistry();
-    const metadata = registry.listMetadata();
+  const tools = AVAILABLE_TOOLS.map(tool => ({
+    name: tool.name,
+    description: tool.description,
+    inputSchema: convertToJsonSchema(tool.inputSchema)
+  }));
 
-    const tools: MCPTool[] = metadata.map((tool) => ({
-      name: tool.name,
-      description: tool.description,
-      inputSchema: convertZodToMCPSchema(tool.inputSchema),
-    }));
-
-    logger.info(`Returning ${tools.length} tools`);
-    return { tools };
-  } catch (error) {
-    logger.error('Failed to list tools', error);
-    throw error;
-  }
+  return { tools };
 }
 
 /**
- * Handle call tool request
+ * Manejar llamada a herramienta
  */
 async function handleCallTool(request: any): Promise<any> {
   const { name, arguments: args } = request.params as {
@@ -64,297 +74,110 @@ async function handleCallTool(request: any): Promise<any> {
     arguments?: unknown;
   };
 
-  logger.info({ tool: name, args }, 'Tool call requested');
+  logger.info(`Ejecutando herramienta: ${name}`);
 
   try {
-    const result = await executeRegistryTool(name, args);
+    // Buscar la herramienta
+    const tool = AVAILABLE_TOOLS.find(t => t.name === name);
+    
+    if (!tool) {
+      throw new Error(`Herramienta no encontrada: ${name}`);
+    }
+
+    // Ejecutar el handler de la herramienta
+    const result = await tool.handler(args);
 
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(result, null, 2),
-        },
-      ],
+          text: JSON.stringify(result, null, 2)
+        }
+      ]
     };
   } catch (error) {
-    logger.error({ error, tool: name }, 'Tool execution failed');
-
-    // Return error in MCP format
+    logger.error(`Error ejecutando herramienta ${name}:`, error);
+    
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(
-            {
-              error: true,
-              message: (error as Error).message,
-              tool: name,
-            },
-            null,
-            2,
-          ),
-        },
+          text: JSON.stringify({
+            error: true,
+            message: (error as Error).message,
+            tool: name
+          }, null, 2)
+        }
       ],
+      isError: true
     };
   }
 }
 
 /**
- * Convert Zod schema to MCP-compatible JSON schema
+ * Convertir schema Zod a JSON Schema para MCP
  */
-function convertZodToMCPSchema(zodSchema: any): any {
-  if (!zodSchema || typeof zodSchema !== 'object') {
-    return {
-      type: 'object',
-      properties: {},
-      additionalProperties: true,
-    };
-  }
-
-  // If it's already in JSON schema format
-  if (zodSchema.type && zodSchema.properties) {
-    return zodSchema;
-  }
-
-  // Basic conversion for common cases
-  const mcpSchema: any = {
+function convertToJsonSchema(zodSchema: any): any {
+  // Conversión simplificada - en producción sería más compleja
+  return {
     type: 'object',
     properties: {},
     required: [],
-  };
-
-  // Try to extract properties
-  if (zodSchema.properties) {
-    for (const [key, value] of Object.entries(zodSchema.properties)) {
-      if (value && typeof value === 'object') {
-        const propSchema = value as any;
-        mcpSchema.properties[key] = {
-          type: propSchema.type || 'string',
-          description: propSchema.description,
-        };
-
-        // Add enum values if present
-        if (propSchema.enum) {
-          mcpSchema.properties[key].enum = propSchema.enum;
-        }
-
-        // Add default if present
-        if (propSchema.default !== undefined) {
-          mcpSchema.properties[key].default = propSchema.default;
-        }
-      }
-    }
-  }
-
-  return mcpSchema;
-}
-
-/**
- * Get all available tools
- */
-export function tools(): MCPTool[] {
-  const registry = getToolRegistry();
-  const metadata = registry.listMetadata();
-
-  return metadata.map((tool) => ({
-    name: tool.name,
-    description: tool.description,
-    inputSchema: convertZodToMCPSchema(tool.inputSchema),
-  }));
-}
-
-/**
- * Get tool by name
- */
-export function getTool(name: string): MCPTool | undefined {
-  const registry = getToolRegistry();
-  const tool = registry.get(name);
-
-  if (!tool) {
-    return undefined;
-  }
-
-  return {
-    name: tool.metadata.name,
-    description: tool.metadata.description,
-    inputSchema: convertZodToMCPSchema(tool.metadata.inputSchema),
+    additionalProperties: false
   };
 }
 
 /**
- * Execute a tool by name
+ * Obtener herramienta por nombre
  */
-export async function executeTool(name: string, input: unknown): Promise<unknown> {
-  logger.info({ tool: name, input }, 'Executing tool');
-
-  try {
-    const result = await executeRegistryTool(name, input);
-    logger.info({ tool: name }, 'Tool executed successfully');
-    return result;
-  } catch (error) {
-    logger.error({ tool: name, error }, 'Tool execution failed');
-    throw error;
-  }
+export function getToolByName(name: string) {
+  return AVAILABLE_TOOLS.find(tool => tool.name === name);
 }
 
 /**
- * Validate tool input
+ * Verificar si una herramienta existe
  */
-export function validateToolInput(name: string, input: unknown): { valid: boolean; errors?: any } {
-  const registry = getToolRegistry();
-  return registry.validateInput(name, input);
+export function hasTool(name: string): boolean {
+  return AVAILABLE_TOOLS.some(tool => tool.name === name);
 }
 
 /**
- * Get tool statistics
+ * Obtener descripción de todas las herramientas
  */
-export function getToolStatistics(name?: string): any {
-  const registry = getToolRegistry();
-  return registry.getStatistics(name);
+export function getToolsDescription(): string {
+  return AVAILABLE_TOOLS.map(tool => 
+    `- **${tool.name}**: ${tool.description}`
+  ).join('\n');
 }
 
 /**
- * Get tool execution history
+ * Exportar herramientas individuales para uso directo
  */
-export function getToolHistory(name?: string, limit = 10): any[] {
-  const registry = getToolRegistry();
-  return registry.getExecutionHistory(name, limit);
-}
+export {
+  roleDirectorTool,
+  roleTransitionTool,
+  bmadWorkflowTools
+};
 
 /**
- * Tool health check
+ * Exportar tipos
  */
-export async function toolHealthCheck(): Promise<Map<string, boolean>> {
-  const registry = getToolRegistry();
-  return registry.healthCheck();
-}
+export type {
+  GetRoleInstructionsInput,
+  RoleInstructionsOutput
+} from './role.director';
 
-/**
- * Export tool names for convenience
- */
-export const TOOL_NAMES = {
-  ORCHESTRATOR_RUN: 'orchestrator.run',
-  ARCHITECT_PLAN: 'architect.plan',
-  DEVELOPER_IMPLEMENT: 'developer.implement',
-  TESTER_VALIDATE: 'tester.validate',
-  DEBUGGER_FIX: 'debugger.fix',
-} as const;
+export type {
+  RoleTransitionInput,
+  RoleTransitionOutput
+} from './role.transition';
 
-/**
- * Export tool descriptions
- */
-export const TOOL_DESCRIPTIONS = {
-  [TOOL_NAMES.ORCHESTRATOR_RUN]: 'Ejecuta un pipeline BMAD completo para desarrollo de software',
-  [TOOL_NAMES.ARCHITECT_PLAN]: 'Genera planificación completa y arquitectura para un proyecto de software',
-  [TOOL_NAMES.DEVELOPER_IMPLEMENT]: 'Implementa código y features basado en tareas especificadas',
-  [TOOL_NAMES.TESTER_VALIDATE]: 'Ejecuta validación completa y testing de aplicaciones',
-  [TOOL_NAMES.DEBUGGER_FIX]: 'Diagnostica y corrige errores automáticamente',
-} as const;
+export type {
+  StartProjectInput,
+  StartProjectOutput,
+  PhaseGuidanceInput,
+  PhaseGuidanceOutput
+} from './bmad.workflow';
 
-/**
- * Helper function to execute orchestrator pipeline
- */
-export async function runOrchestratorPipeline(objective: string, options?: any): Promise<any> {
-  return executeTool(TOOL_NAMES.ORCHESTRATOR_RUN, {
-    objective,
-    ...options,
-  });
-}
-
-/**
- * Helper function to create architecture plan
- */
-export async function createArchitecturePlan(objective: string, constraints?: string[]): Promise<any> {
-  return executeTool(TOOL_NAMES.ARCHITECT_PLAN, {
-    objective,
-    constraints,
-  });
-}
-
-/**
- * Helper function to implement features
- */
-export async function implementFeatures(taskIds: string[], options?: any): Promise<any> {
-  return executeTool(TOOL_NAMES.DEVELOPER_IMPLEMENT, {
-    taskIds,
-    ...options,
-  });
-}
-
-/**
- * Helper function to validate application
- */
-export async function validateApplication(suites?: string[], options?: any): Promise<any> {
-  return executeTool(TOOL_NAMES.TESTER_VALIDATE, {
-    suites: suites || ['unit'],
-    ...options,
-  });
-}
-
-/**
- * Helper function to debug and fix errors
- */
-export async function debugAndFix(failureRef: string, options?: any): Promise<any> {
-  return executeTool(TOOL_NAMES.DEBUGGER_FIX, {
-    failureRef,
-    ...options,
-  });
-}
-
-/**
- * Execute tools in sequence
- */
-export async function executeToolSequence(sequence: Array<{ name: string; input: unknown }>): Promise<unknown[]> {
-  logger.info(`Executing tool sequence: ${sequence.map((s) => s.name).join(' -> ')}`);
-
-  const registry = getToolRegistry();
-  return registry.executeSequence(sequence);
-}
-
-/**
- * Execute tools in parallel
- */
-export async function executeToolsParallel(tools: Array<{ name: string; input: unknown }>): Promise<unknown[]> {
-  logger.info(`Executing tools in parallel: ${tools.map((t) => t.name).join(', ')}`);
-
-  const registry = getToolRegistry();
-  return registry.executeParallel(tools);
-}
-
-/**
- * Find tools by capability
- */
-export function findToolsByCapability(capability: string): MCPTool[] {
-  const registry = getToolRegistry();
-  const tools = registry.findByCapability(capability);
-
-  return tools.map((tool) => ({
-    name: tool.metadata.name,
-    description: tool.metadata.description,
-    inputSchema: convertZodToMCPSchema(tool.metadata.inputSchema),
-  }));
-}
-
-/**
- * Initialize all tools on module load
- */
-let initialized = false;
-
-export async function ensureToolsInitialized(): Promise<void> {
-  if (!initialized) {
-    await initializeTools();
-    initialized = true;
-    logger.info('Tools initialized successfully');
-  }
-}
-
-// Auto-initialize when module is imported
-ensureToolsInitialized().catch((error) => {
-  logger.error('Failed to auto-initialize tools', error);
-});
-
-/**
- * Export types for external use
- */
-export type { Tool, ToolExecutionResult } from './registry';
+// Re-exportar enums útiles
+export { AgentRole, BMADPhase } from './role.director';

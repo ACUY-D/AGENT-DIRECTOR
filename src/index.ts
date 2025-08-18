@@ -1,248 +1,190 @@
 /**
- * MCP Dev Orchestrator
- * Main entry point for the MCP server
+ * MCP Role Director
+ * Servidor MCP que proporciona guía metodológica y dirección de roles
  */
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { ExecutionMode, Orchestrator, OrchestratorMode, createOrchestrator } from './core/orchestrator';
-import { createPipelineManager } from './core/pipeline';
-import { createStateMachine } from './core/state-machine';
-import { registerOrchestratorPrompts } from './prompts/definitions/orchestrator.prompts';
-import { getPromptRegistry, initializePrompts } from './prompts/registry';
-import { getResourceRegistry, initializeResources } from './resources';
-import { TOOL_DESCRIPTIONS, TOOL_NAMES, ensureToolsInitialized, getToolStatistics, registerTools } from './tools';
-import type { Config } from './types';
 import { createLogger } from './utils/logger';
+import { registerTools, AVAILABLE_TOOLS, getToolsDescription } from './tools';
 
-const logger = createLogger('mcp-server');
+const logger = createLogger('mcp-role-director');
 
 /**
- * Initialize and start the MCP server
+ * Configuración del servidor
  */
-async function startServer(): Promise<void> {
-  logger.info('Starting MCP Dev Orchestrator server');
-
-  // Create server instance
-  const server = new Server(
-    {
-      name: 'mcp-dev-orchestrator',
-      version: '0.1.0',
-    },
-    {
-      capabilities: {
-        tools: {},
-        resources: {},
-        prompts: {},
-      },
-    },
-  );
-
-  // Initialize tools first
-  logger.info('Initializing tools...');
-  await ensureToolsInitialized();
-
-  // Initialize core components
-  logger.info('Initializing core components...');
-  const orchestratorConfig = {
-    workDir: process.cwd(),
-    mode: ExecutionMode.AUTO,
-    environment: OrchestratorMode.DEVELOPMENT,
-    maxRetries: 3,
-    logLevel: 'info' as const,
-  };
-
-  const orchestrator = createOrchestrator(orchestratorConfig);
-  await orchestrator.initialize();
-
-  // Create state machine
-  const stateMachine = createStateMachine({
-    enableLogging: true,
-    logLevel: 'info',
-    maxRetries: 3,
-  });
-
-  // Register tools with MCP server
-  logger.info('Registering tools with MCP server...');
-  await registerTools(server);
-
-  // Register resources and prompts via new registries
-  logger.info('Registering resources (registry-based)...');
-  await initializeResources(server);
-
-  logger.info('Registering prompts (registry-based)...');
-  // Ensure orchestrator prompts are registered before installing handlers
-  registerOrchestratorPrompts(getPromptRegistry());
-  await initializePrompts(server);
-
-  // Handle completion requests
-  const completionHandler = async (request: any) => {
-    logger.info({ request }, 'Completion requested');
-
-    // Provide intelligent completions based on context
-    const params = (request.params as any) || {};
-    const ref = params.ref as { type: string; name?: string } | undefined;
-
-    let completions = [];
-
-    if (ref?.type === 'tool') {
-      // Suggest tool names
-      completions = Object.values(TOOL_NAMES);
-    } else if (ref?.type === 'resource') {
-      // Suggest resource URIs from registry
-      const registry = getResourceRegistry();
-      completions = registry.list().map((r) => r.uri);
-    } else {
-      // Default completions
-      completions = [
-        TOOL_NAMES.ORCHESTRATOR_RUN,
-        TOOL_NAMES.ARCHITECT_PLAN,
-        TOOL_NAMES.DEVELOPER_IMPLEMENT,
-        TOOL_NAMES.TESTER_VALIDATE,
-        TOOL_NAMES.DEBUGGER_FIX,
-      ];
-    }
-
-    return {
-      completion: {
-        values: completions,
-        total: completions.length,
-        hasMore: false,
-      },
-    };
-  };
-
-  // Type assertion to bypass strict typing temporarily
-  (server as any).setRequestHandler('completion/complete', completionHandler);
-
-  // Initialize state machine
-  stateMachine.start();
-
-  // Set up error handling
-  process.on('uncaughtException', (error) => {
-    logger.error({ error }, 'Uncaught exception');
-    process.exit(1);
-  });
-
-  process.on('unhandledRejection', (reason, promise) => {
-    logger.error({ reason, promise }, 'Unhandled rejection');
-    process.exit(1);
-  });
-
-  // Handle shutdown gracefully
-  process.on('SIGINT', async () => {
-    logger.info('Received SIGINT, shutting down gracefully');
-    stateMachine.stop();
-    orchestrator.abort();
-    process.exit(0);
-  });
-
-  process.on('SIGTERM', async () => {
-    logger.info('Received SIGTERM, shutting down gracefully');
-    stateMachine.stop();
-    orchestrator.abort();
-    process.exit(0);
-  });
-
-  // Create transport based on environment
-  const transport = new StdioServerTransport();
-
-  // Connect server to transport
-  await server.connect(transport);
-
-  logger.info('MCP Dev Orchestrator server started successfully');
-  logger.info('Available tools:', Object.values(TOOL_NAMES));
-
-  // Log tool statistics
-  const stats = getToolStatistics();
-  logger.info('Tool registry statistics:', {
-    totalTools: stats.totalTools,
-    tools: Object.keys(stats.tools || {}),
-  });
-
-  logger.info('Waiting for client connections...');
+interface ServerConfig {
+  name: string;
+  version: string;
+  description: string;
+  logLevel: 'debug' | 'info' | 'warn' | 'error';
 }
 
 /**
- * Main function
+ * Configuración por defecto
  */
-async function main(): Promise<void> {
+const DEFAULT_CONFIG: ServerConfig = {
+  name: '@mcp/role-director',
+  version: '1.0.0',
+  description: 'MCP server que proporciona dirección de roles y metodología BMAD',
+  logLevel: process.env.LOG_LEVEL as any || 'info'
+};
+
+/**
+ * Inicializar y arrancar el servidor MCP
+ */
+async function startServer(): Promise<void> {
+  logger.info('Iniciando MCP Role Director...');
+
   try {
-    // Load configuration
-    const config = loadConfiguration();
+    // Crear instancia del servidor
+    const server = new Server(
+      {
+        name: DEFAULT_CONFIG.name,
+        version: DEFAULT_CONFIG.version,
+      },
+      {
+        capabilities: {
+          tools: {},
+          resources: {}
+        },
+      },
+    );
 
-    // Set up logging
-    setupLogging(config);
+    // Registrar herramientas de director de roles
+    logger.info('Registrando herramientas de director de roles...');
+    await registerTools(server);
+    
+    logger.info(`${AVAILABLE_TOOLS.length} herramientas registradas exitosamente:`);
+    logger.info('\n' + getToolsDescription());
 
-    // Start the server
-    await startServer();
+    // Manejador de solicitudes de información del servidor
+    server.setRequestHandler('server/info' as any, async () => {
+      return {
+        name: DEFAULT_CONFIG.name,
+        version: DEFAULT_CONFIG.version,
+        description: DEFAULT_CONFIG.description,
+        capabilities: {
+          tools: true,
+          resources: true
+        }
+      };
+    });
+
+    // Manejador de health check
+    server.setRequestHandler('health/check' as any, async () => {
+      return {
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        tools: AVAILABLE_TOOLS.length
+      };
+    });
+
+    // Configurar manejo de errores
+    setupErrorHandlers();
+
+    // Configurar señales de terminación
+    setupSignalHandlers();
+
+    // Crear transporte stdio
+    const transport = new StdioServerTransport();
+
+    // Conectar servidor al transporte
+    await server.connect(transport);
+
+    logger.info('=====================================');
+    logger.info('MCP Role Director iniciado exitosamente');
+    logger.info('=====================================');
+    logger.info('Modo: Guía de roles y metodología BMAD');
+    logger.info('Esperando conexiones de clientes...');
+    
   } catch (error) {
-    logger.error({ error }, 'Failed to start server');
-    console.error('Fatal error:', error);
-    process.exit(1);
+    logger.error('Error al iniciar el servidor:', error);
+    throw error;
   }
 }
 
 /**
- * Load configuration from environment and files
+ * Configurar manejadores de errores
  */
-function loadConfiguration(): Config {
-  // Load from environment variables
-  const config: Config = {
-    environment: (process.env.NODE_ENV as 'development' | 'staging' | 'production') || 'development',
-    logLevel: (process.env.LOG_LEVEL as 'debug' | 'info' | 'warn' | 'error') || 'info',
-    server: {
-      host: process.env.HOST || 'localhost',
-      port: Number.parseInt(process.env.PORT || '3000', 10),
-    },
-    orchestrator: {
-      maxConcurrentTasks: Number.parseInt(process.env.MAX_CONCURRENT_TASKS || '5', 10),
-      taskTimeout: Number.parseInt(process.env.TASK_TIMEOUT || '300000', 10),
-      retryAttempts: Number.parseInt(process.env.RETRY_ATTEMPTS || '3', 10),
-    },
-    adapters: {
-      github: {
-        token: process.env.GITHUB_TOKEN,
-        owner: process.env.GITHUB_OWNER,
-        repo: process.env.GITHUB_REPO,
-      },
-      memory: {
-        serverUrl: process.env.MEMORY_SERVER_URL,
-      },
-      sequential: {
-        serverUrl: process.env.SEQUENTIAL_SERVER_URL,
-      },
-    },
-  };
+function setupErrorHandlers(): void {
+  process.on('uncaughtException', (error) => {
+    logger.error('Excepción no capturada:', error);
+    process.exit(1);
+  });
 
-  return config;
-}
-
-/**
- * Set up logging configuration
- */
-function setupLogging(config: Config): void {
-  // Logging is already configured via environment variables in logger.ts
-  logger.info(
-    {
-      environment: config.environment,
-      logLevel: config.logLevel,
-      server: config.server,
-    },
-    'Configuration loaded',
-  );
-}
-
-// Start the server if this is the main module
-if (import.meta.url === `file://${process.argv[1]}`) {
-  main().catch((error) => {
-    console.error('Failed to start:', error);
+  process.on('unhandledRejection', (reason, promise) => {
+    logger.error('Promesa rechazada no manejada:', { reason, promise });
     process.exit(1);
   });
 }
 
-// Export for testing and programmatic use
-export { startServer, Orchestrator, createOrchestrator, createPipelineManager, createStateMachine };
+/**
+ * Configurar manejadores de señales
+ */
+function setupSignalHandlers(): void {
+  const gracefulShutdown = async (signal: string) => {
+    logger.info(`Recibida señal ${signal}, cerrando servidor...`);
+    
+    // Aquí podrías agregar lógica de limpieza si fuera necesaria
+    
+    logger.info('Servidor cerrado correctamente');
+    process.exit(0);
+  };
 
-// Export tool names and descriptions for external use
-export { TOOL_NAMES, TOOL_DESCRIPTIONS };
+  process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+  process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+}
+
+/**
+ * Función principal
+ */
+async function main(): Promise<void> {
+  try {
+    logger.info('=====================================');
+    logger.info('MCP Role Director v1.0.0');
+    logger.info('=====================================');
+    logger.info('');
+    logger.info('Este servidor proporciona:');
+    logger.info('- Guía de roles para agentes AI');
+    logger.info('- Metodología BMAD estructurada');
+    logger.info('- Transiciones inteligentes entre roles');
+    logger.info('');
+    
+    await startServer();
+  } catch (error) {
+    logger.error('Error fatal al iniciar:', error);
+    console.error('Error fatal:', error);
+    process.exit(1);
+  }
+}
+
+// Arrancar el servidor si es el módulo principal
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().catch((error) => {
+    console.error('Fallo al arrancar:', error);
+    process.exit(1);
+  });
+}
+
+// Exportar para testing y uso programático
+export { 
+  startServer,
+  ServerConfig,
+  DEFAULT_CONFIG
+};
+
+// Re-exportar herramientas disponibles
+export { 
+  AVAILABLE_TOOLS,
+  getToolsDescription,
+  getToolByName,
+  hasTool
+} from './tools';
+
+// Re-exportar tipos de roles y fases
+export { 
+  AgentRole,
+  BMADPhase
+} from './tools/role.director';

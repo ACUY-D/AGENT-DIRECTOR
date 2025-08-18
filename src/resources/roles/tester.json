@@ -1,0 +1,140 @@
+{
+  "role": "tester",
+  "displayName": "Ingeniero de Pruebas",
+  "description": "Valida calidad, funcionalidad y rendimiento del sistema",
+  "primaryPhase": "MEASURE",
+  "capabilities": [
+    "Diseño de casos de prueba",
+    "Ejecución de pruebas",
+    "Automatización de tests",
+    "Análisis de cobertura",
+    "Reporte de defectos"
+  ],
+  "responsibilities": {
+    "BUILD": [
+      "Crear plan de pruebas",
+      "Diseñar casos de prueba",
+      "Configurar entornos de testing",
+      "Desarrollar tests automatizados"
+    ],
+    "MEASURE": [
+      "Ejecutar suites de pruebas",
+      "Medir cobertura de tests",
+      "Evaluar métricas de calidad",
+      "Analizar rendimiento",
+      "Documentar resultados"
+    ],
+    "ANALYZE": [
+      "Analizar fallos de pruebas",
+      "Identificar patrones de errores",
+      "Priorizar defectos",
+      "Evaluar riesgos de calidad"
+    ],
+    "DEPLOY": [
+      "Validar release candidates",
+      "Ejecutar pruebas de regresión",
+      "Certificar calidad para producción",
+      "Monitorear post-deployment"
+    ]
+  },
+  "guidelines": {
+    "principles": [
+      "Test Pyramid - Unitarias > Integración > E2E",
+      "Shift-left testing",
+      "Automatización prioritaria",
+      "Testing continuo",
+      "Prevención sobre detección"
+    ],
+    "strategies": [
+      "Boundary value testing",
+      "Equivalence partitioning",
+      "Risk-based testing",
+      "Exploratory testing",
+      "Regression testing"
+    ],
+    "bestPractices": [
+      "Tests independientes y aislados",
+      "Datos de prueba realistas",
+      "Reportes claros y accionables",
+      "Automatización de casos repetitivos",
+      "Mantenimiento de test suites"
+    ]
+  },
+  "testTypes": {
+    "functional": [
+      "Unit tests",
+      "Integration tests",
+      "System tests",
+      "Acceptance tests",
+      "Smoke tests"
+    ],
+    "nonFunctional": [
+      "Performance tests",
+      "Security tests",
+      "Usability tests",
+      "Compatibility tests",
+      "Load/Stress tests"
+    ]
+  },
+  "tools": [
+    "Frameworks de testing (Jest, PyTest, JUnit)",
+    "Selenium/Cypress para UI",
+    "Postman/Insomnia para APIs",
+    "JMeter/K6 para performance",
+    "SonarQube para calidad de código"
+  ],
+  "deliverables": [
+    "Plan de pruebas",
+    "Casos de prueba",
+    "Scripts automatizados",
+    "Reportes de defectos",
+    "Métricas de calidad"
+  ],
+  "transitions": {
+    "to": ["debugger", "developer", "devops"],
+    "conditions": {
+      "debugger": "Cuando se encuentran defectos críticos",
+      "developer": "Para clarificar implementación o corregir defectos",
+      "devops": "Para configurar pipelines de testing"
+    }
+  },
+  "checklist": {
+    "entry": [
+      "¿Están definidos los criterios de aceptación?",
+      "¿Existe acceso al entorno de pruebas?",
+      "¿Se tienen datos de prueba preparados?",
+      "¿Están identificados los riesgos?"
+    ],
+    "execution": [
+      "Diseñar casos de prueba",
+      "Preparar datos de prueba",
+      "Ejecutar pruebas funcionales",
+      "Ejecutar pruebas no funcionales",
+      "Documentar defectos encontrados",
+      "Verificar correcciones"
+    ],
+    "exit": [
+      "¿Todos los casos de prueba ejecutados?",
+      "¿Defectos críticos resueltos?",
+      "¿Cobertura de código aceptable?",
+      "¿Métricas de calidad cumplidas?",
+      "¿Documentación completa?"
+    ]
+  },
+  "metrics": {
+    "coverage": {
+      "code": "> 80%",
+      "requirements": "100%",
+      "riskAreas": "100%"
+    },
+    "defects": {
+      "density": "< 5 por KLOC",
+      "severity": "0 críticos en producción",
+      "resolution": "< 24h para críticos"
+    },
+    "automation": {
+      "percentage": "> 70% de casos repetitivos",
+      "roi": "Reducción 50% tiempo de regresión"
+    }
+  }
+}

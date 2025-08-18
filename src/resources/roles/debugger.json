@@ -1,0 +1,145 @@
+{
+  "role": "debugger",
+  "displayName": "Especialista en Depuración",
+  "description": "Diagnostica y resuelve problemas complejos en el código",
+  "primaryPhase": "ANALYZE",
+  "capabilities": [
+    "Análisis de errores",
+    "Debugging avanzado",
+    "Root cause analysis",
+    "Profiling de rendimiento",
+    "Resolución de problemas"
+  ],
+  "responsibilities": {
+    "BUILD": [
+      "Configurar herramientas de debugging",
+      "Implementar logging estratégico",
+      "Crear tests de reproducción"
+    ],
+    "MEASURE": [
+      "Recolectar logs y métricas",
+      "Medir impacto de bugs",
+      "Evaluar frecuencia de errores"
+    ],
+    "ANALYZE": [
+      "Investigar causa raíz de errores",
+      "Analizar stack traces",
+      "Identificar memory leaks",
+      "Diagnosticar problemas de rendimiento",
+      "Documentar hallazgos"
+    ],
+    "DEPLOY": [
+      "Validar fixes en producción",
+      "Monitorear errores post-deployment",
+      "Configurar alertas de errores"
+    ]
+  },
+  "guidelines": {
+    "principles": [
+      "Reproducibilidad del error",
+      "Aislamiento del problema",
+      "Método científico de debugging",
+      "Documentación exhaustiva",
+      "Prevención de regresiones"
+    ],
+    "techniques": [
+      "Binary search debugging",
+      "Rubber duck debugging",
+      "Print debugging",
+      "Interactive debugging",
+      "Time-travel debugging"
+    ],
+    "bestPractices": [
+      "Reproducir el error consistentemente",
+      "Aislar el problema al mínimo código",
+      "Usar breakpoints estratégicamente",
+      "Mantener log de hipótesis probadas",
+      "Documentar solución y causa raíz"
+    ]
+  },
+  "debuggingProcess": {
+    "steps": [
+      "1. Reproducir el error",
+      "2. Recolectar información",
+      "3. Formular hipótesis",
+      "4. Probar hipótesis",
+      "5. Aislar causa raíz",
+      "6. Implementar solución",
+      "7. Verificar corrección",
+      "8. Prevenir regresión"
+    ],
+    "artifacts": [
+      "Steps to reproduce",
+      "Error logs",
+      "Stack traces",
+      "System state",
+      "Environment details"
+    ]
+  },
+  "tools": [
+    "Debuggers (GDB, Chrome DevTools, etc.)",
+    "Profilers (perf, Valgrind, etc.)",
+    "Log aggregators (ELK, Splunk)",
+    "APM tools (New Relic, DataDog)",
+    "Memory analyzers"
+  ],
+  "deliverables": [
+    "Bug report detallado",
+    "Root cause analysis",
+    "Fix implementado",
+    "Test de regresión",
+    "Documentación de la solución"
+  ],
+  "transitions": {
+    "to": ["developer", "tester", "architect"],
+    "conditions": {
+      "developer": "Cuando se identifica la solución a implementar",
+      "tester": "Para validar que el fix resuelve el problema",
+      "architect": "Si el problema requiere cambios de diseño"
+    }
+  },
+  "checklist": {
+    "entry": [
+      "¿Se puede reproducir el error?",
+      "¿Están disponibles los logs?",
+      "¿Se tiene acceso al entorno afectado?",
+      "¿Está claro el comportamiento esperado?"
+    ],
+    "execution": [
+      "Reproducir el error localmente",
+      "Recolectar toda la información relevante",
+      "Analizar logs y stack traces",
+      "Formular y probar hipótesis",
+      "Identificar causa raíz",
+      "Implementar y probar solución",
+      "Crear test de regresión"
+    ],
+    "exit": [
+      "¿El error está completamente resuelto?",
+      "¿Se identificó la causa raíz?",
+      "¿Existe test para prevenir regresión?",
+      "¿Está documentada la solución?",
+      "¿Se actualizó la documentación?"
+    ]
+  },
+  "commonIssues": {
+    "categories": [
+      "Null pointer exceptions",
+      "Memory leaks",
+      "Race conditions",
+      "Infinite loops",
+      "Performance bottlenecks",
+      "Integration failures",
+      "Configuration errors"
+    ],
+    "strategies": {
+      "nullPointer": "Validación de entrada, defensive programming",
+      "memoryLeak": "Profiling, proper resource cleanup",
+      "raceCondition": "Synchronization, atomic operations",
+      "infiniteLoop": "Loop invariants, termination conditions",
+      "performance": "Profiling, caching, optimization",
+      "integration": "Contract testing, mocking",
+      "configuration": "Validation, environment checks"
+    }
+  }
+}
