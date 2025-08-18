@@ -54,7 +54,11 @@ export class MockFileSystem {
     if (!this.files.has(path)) {
       throw new Error(`ENOENT: no such file or directory, open '${path}'`);
     }
-    return this.files.get(path)!;
+    const content = this.files.get(path);
+    if (content === undefined) {
+      throw new Error(`ENOENT: no such file or directory, open '${path}'`);
+    }
+    return content;
   }
 
   /**
@@ -229,10 +233,10 @@ export function createMockFs() {
             ...Array.from(mockFs.getAllDirectories()).filter((d) => d.startsWith(path)),
           ];
 
-          toRemove.forEach((item) => {
+          for (const item of toRemove) {
             mockFs.getAllFiles().delete(item);
             mockFs.getAllDirectories().delete(item);
-          });
+          }
         } else {
           mockFs.deleteFile(path);
         }
@@ -263,10 +267,10 @@ export function createMockFs() {
           ...Array.from(mockFs.getAllDirectories()).filter((d) => d.startsWith(path)),
         ];
 
-        toRemove.forEach((item) => {
+        for (const item of toRemove) {
           mockFs.getAllFiles().delete(item);
           mockFs.getAllDirectories().delete(item);
-        });
+        }
       } else {
         mockFs.deleteFile(path);
       }

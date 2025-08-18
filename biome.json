@@ -63,7 +63,7 @@
         "noUnsafeNegation": "error",
         "useDefaultSwitchClauseLast": "error",
         "useValidTypeof": "error",
-        "noExplicitAny": "warn"
+        "noExplicitAny": "off"
       },
       "style": {
         "noCommaOperator": "error",

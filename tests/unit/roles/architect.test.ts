@@ -75,13 +75,13 @@ describe('ArchitectAgent', () => {
       expect(Array.isArray(result.data.components)).toBe(true);
       expect(result.data.components.length).toBeGreaterThan(0);
 
-      result.data.components.forEach((component: any) => {
+      for (const component of result.data.components) {
         expect(component).toMatchObject({
           name: expect.any(String),
           type: expect.any(String),
           responsibilities: expect.any(Array),
         });
-      });
+      }
     });
 
     it('should create Architecture Decision Records (ADRs)', async () => {
@@ -91,7 +91,7 @@ describe('ArchitectAgent', () => {
       expect(Array.isArray(result.data.adrs)).toBe(true);
       expect(result.data.adrs.length).toBeGreaterThan(0);
 
-      result.data.adrs.forEach((adr: any) => {
+      for (const adr of result.data.adrs) {
         expect(adr).toMatchObject({
           id: expect.stringMatching(/^ADR-\d{3}$/),
           title: expect.any(String),
@@ -100,7 +100,7 @@ describe('ArchitectAgent', () => {
           decision: expect.any(String),
           consequences: expect.any(String),
         });
-      });
+      }
     });
 
     it('should perform risk assessment', async () => {
@@ -110,7 +110,7 @@ describe('ArchitectAgent', () => {
       expect(result.data.riskAssessment.risks).toBeDefined();
       expect(Array.isArray(result.data.riskAssessment.risks)).toBe(true);
 
-      result.data.riskAssessment.risks.forEach((risk: any) => {
+      for (const risk of result.data.riskAssessment.risks) {
         expect(risk).toMatchObject({
           id: expect.stringMatching(/^RISK-\d{3}$/),
           description: expect.any(String),
@@ -118,7 +118,7 @@ describe('ArchitectAgent', () => {
           impact: expect.stringMatching(/^(low|medium|high)$/),
           mitigation: expect.any(String),
         });
-      });
+      }
     });
 
     it('should estimate required resources', async () => {
@@ -224,14 +224,14 @@ describe('ArchitectAgent', () => {
       expect(architecture.interfaces).toBeDefined();
       expect(Array.isArray(architecture.interfaces)).toBe(true);
 
-      architecture.interfaces.forEach((iface: any) => {
+      for (const iface of architecture.interfaces) {
         expect(iface).toMatchObject({
           from: expect.any(String),
           to: expect.any(String),
           protocol: expect.any(String),
           description: expect.any(String),
         });
-      });
+      }
     });
 
     it('should specify technology stack', async () => {
@@ -285,10 +285,10 @@ describe('ArchitectAgent', () => {
       const techRisks = assessment.risks.filter((risk) => risk.category === 'technical');
 
       expect(techRisks.length).toBeGreaterThan(0);
-      techRisks.forEach((risk) => {
+      for (const risk of techRisks) {
         expect(risk.mitigation).toBeDefined();
         expect(risk.mitigation.length).toBeGreaterThan(10);
-      });
+      }
     });
 
     it('should identify security risks', async () => {
@@ -340,13 +340,13 @@ describe('ArchitectAgent', () => {
       expect(estimate.team.roles).toBeDefined();
       expect(Array.isArray(estimate.team.roles)).toBe(true);
 
-      estimate.team.roles.forEach((role: any) => {
+      for (const role of estimate.team.roles) {
         expect(role).toMatchObject({
           title: expect.any(String),
           count: expect.any(Number),
           level: expect.stringMatching(/^(junior|mid|senior|lead)$/),
         });
-      });
+      }
     });
 
     it('should estimate infrastructure costs', async () => {

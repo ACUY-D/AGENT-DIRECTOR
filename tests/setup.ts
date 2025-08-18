@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
-import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, beforeEach, expect, vi } from 'vitest';
 
 // Test directories
 const TEST_TEMP_DIR = join(__dirname, '..', '.tmp-test');
@@ -14,11 +14,11 @@ export const testUtils = {
   checkpointsDir: TEST_CHECKPOINTS_DIR,
 
   createTestDirs() {
-    [TEST_TEMP_DIR, TEST_ARTIFACTS_DIR, TEST_CHECKPOINTS_DIR].forEach((dir) => {
+    for (const dir of [TEST_TEMP_DIR, TEST_ARTIFACTS_DIR, TEST_CHECKPOINTS_DIR]) {
       if (!existsSync(dir)) {
         mkdirSync(dir, { recursive: true });
       }
-    });
+    }
   },
 
   cleanTestDirs() {
@@ -48,9 +48,15 @@ beforeAll(async () => {
 
   // Suppress console during tests unless DEBUG is set
   if (!process.env.DEBUG) {
-    vi.spyOn(console, 'log').mockImplementation(() => {});
-    vi.spyOn(console, 'info').mockImplementation(() => {});
-    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.spyOn(console, 'log').mockImplementation(() => {
+      // Intentionally empty to suppress logs
+    });
+    vi.spyOn(console, 'info').mockImplementation(() => {
+      // Intentionally empty to suppress logs
+    });
+    vi.spyOn(console, 'warn').mockImplementation(() => {
+      // Intentionally empty to suppress logs
+    });
   }
 });
 
