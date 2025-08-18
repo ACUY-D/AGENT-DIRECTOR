@@ -46,7 +46,7 @@
     "lint": "biome check --write .",
     "lint:fix": "biome check --apply --unsafe .",
     "format": "biome format --write .",
-    "format:check": "biome format --check .",
+    "format:check": "biome check .",
     "type-check": "tsc --noEmit",
     "test": "vitest",
     "test:unit": "vitest run tests/unit",
@@ -144,14 +144,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mcp-team/mcp-role-director.git",
+    "url": "git+https://github.com/ACUY-D/AGENT-DIRECTOR.git",
     "directory": "/"
   },
   "bugs": {
-    "url": "https://github.com/mcp-team/mcp-role-director/issues",
+    "url": "https://github.com/ACUY-D/AGENT-DIRECTOR/issues",
     "email": "bugs@mcp-role-director.dev"
   },
-  "homepage": "https://github.com/mcp-team/mcp-role-director#readme",
+  "homepage": "https://github.com/ACUY-D/AGENT-DIRECTOR#readme",
   "funding": [
     {
       "type": "github",
