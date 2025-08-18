@@ -1,87 +1,73 @@
 /**
- * Resources MCP - Punto de entrada
- * - Registra descriptores y resolvers en el ResourceRegistry
- * - Expone initializeResources(server?) para instalar handlers MCP (resources/list, resources/read)
+ * Resources MCP - Punto de entrada simplificado para MCP Role Director
+ * Proporciona acceso a los recursos de roles (JSON) sin complejidades del orchestrator
  */
 
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
 import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import { createLogger } from '@utils/logger';
-import {
-  ResourceUtils,
-  getResourceRegistry,
-  listResources as registryList,
-  readResource as registryRead,
-} from './registry';
-import { getOrchestratorResourceDescriptors, orchestratorResourceResolver } from './resolvers/orchestrator.resources';
-import { ResourceReadParamsSchema, type ResourceReadResult, ResourcesListResultSchema } from './schemas';
+import { createLogger } from '../utils/logger';
 
 const logger = createLogger('mcp-resources-index');
 
 /**
- * Registra todos los recursos soportados en el registry
- */
-function registerAllResources(): void {
-  const registry = getResourceRegistry();
-
-  // Registros del namespace orchestrator/*
-  const orchestratorDescriptors = getOrchestratorResourceDescriptors();
-  for (const desc of orchestratorDescriptors) {
-    registry.register(desc, orchestratorResourceResolver);
-  }
-
-  logger.info({ total: registryList().length }, 'Resources registrados en el registry');
-}
-
-/**
- * Inicializa y opcionalmente instala handlers MCP en el server
+ * Inicializa los recursos básicos para MCP Role Director
  */
 export async function initializeResources(server?: Server): Promise<void> {
-  // Registrar descriptores y resolvers
-  registerAllResources();
-
   if (!server) {
+    logger.info('Sin servidor MCP proporcionado, inicialización básica');
     return;
   }
 
-  // Handler: resources/list
+  // Handler: resources/list - Lista los roles disponibles
   server.setRequestHandler('resources/list', async () => {
-    const resources = registryList();
-    // Validar salida
-    const result = ResourcesListResultSchema.parse({ resources });
-    return result;
+    const rolesDir = path.join(process.cwd(), 'src/resources/roles');
+
+    try {
+      const files = await fs.readdir(rolesDir);
+      const jsonFiles = files.filter((file) => file.endsWith('.json'));
+
+      const resources = jsonFiles.map((file) => ({
+        uri: `mcp://roles/${path.basename(file, '.json')}`,
+        name: path.basename(file, '.json').toUpperCase(),
+        description: `Definición del rol ${path.basename(file, '.json')}`,
+        mimeType: 'application/json',
+      }));
+
+      return { resources };
+    } catch (error) {
+      logger.error('Error listando recursos de roles:', error);
+      return { resources: [] };
+    }
   });
 
-  // Handler: resources/read
+  // Handler: resources/read - Lee un archivo de rol específico
   server.setRequestHandler('resources/read', async (request) => {
-    const params = ResourceReadParamsSchema.parse(request.params);
-    logger.info({ uri: params.uri }, 'Solicitud de lectura de recurso');
+    const { uri } = request.params as { uri: string };
 
-    const content = await registryRead(params.uri);
-
-    // Mapear al formato MCP esperado
-    const mcpContent: any = {
-      uri: content.uri,
-      mimeType: content.mimeType,
-    };
-
-    if ('text' in content) {
-      mcpContent.text = content.text;
-    } else if ('base64' in content) {
-      mcpContent.base64 = content.base64;
+    if (!uri.startsWith('mcp://roles/')) {
+      throw new Error(`URI no soportada: ${uri}`);
     }
 
-    const response = {
-      contents: [mcpContent],
-    };
+    const roleName = uri.replace('mcp://roles/', '');
+    const roleFile = path.join(process.cwd(), 'src/resources/roles', `${roleName}.json`);
 
-    return response;
+    try {
+      const content = await fs.readFile(roleFile, 'utf8');
+      return {
+        contents: [
+          {
+            uri,
+            mimeType: 'application/json',
+            text: content,
+          },
+        ],
+      };
+    } catch (error) {
+      logger.error(`Error leyendo rol ${roleName}:`, error);
+      throw new Error(`Rol no encontrado: ${roleName}`);
+    }
   });
 
   logger.info('Handlers MCP de resources registrados');
 }
-
-/**
- * Utilidades re-exportadas
- */
-export { getResourceRegistry } from './registry';
-export { ResourceUtils } from './registry';
