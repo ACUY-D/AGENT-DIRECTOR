@@ -132,6 +132,16 @@
     "vite": "^7.1.2",
     "vitest": "^3.2.4"
   },
+  "optionalDependencies": {
+    "@biomejs/cli-darwin-arm64": "1.5.3",
+    "@biomejs/cli-darwin-x64": "1.5.3",
+    "@biomejs/cli-linux-arm64": "1.5.3",
+    "@biomejs/cli-linux-arm64-musl": "1.5.3",
+    "@biomejs/cli-linux-x64": "1.5.3",
+    "@biomejs/cli-linux-x64-musl": "1.5.3",
+    "@biomejs/cli-win32-arm64": "1.5.3",
+    "@biomejs/cli-win32-x64": "1.5.3"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mcp-team/mcp-role-director.git",
